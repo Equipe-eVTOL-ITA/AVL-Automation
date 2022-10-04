@@ -16,4 +16,4 @@ case1 = level_flight_case_data(10, 4, 1.2, 9.8);
 case2 = level_flight_case_data(15, 4, 1.2, 9.8);
 
 executeavl(plane, [case1, case2])
-stdata1 = stdata('armagedon_level_flight1.st');
+stdata1 = stdata('armagedon_level_flight1');
