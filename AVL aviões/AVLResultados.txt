@@ -1,0 +1,2 @@
+Aerofólio, CL e CD com alfa = 0, CLmax
+esse_aqui (opcao_aerofolio.dat)   1.069200   0.096480   1.788070

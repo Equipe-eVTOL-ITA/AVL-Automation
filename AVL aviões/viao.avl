@@ -1,0 +1,90 @@
+PlaneMcPlaneFace
+#número de mach
+0
+#não há simetrias no avião inteiro
+0 0 0
+#área da asa principal, corda e envergadura
+0.5 0.3 1.666
+#centro de massa na origem (?)
+0 0 0
+#Cd de arrasto parasita
+0.02
+
+######
+######
+
+#asa principal
+SURFACE
+mainwing
+#vórtices com distrbuição de cossenos
+15 1 40 1
+#simetria da asa no plano y = 0
+YDUPLICATE
+0
+#ângulo de incidência 0
+ANGLE
+0
+COMPONENT
+1
+TRANSLATE
+0 0 0.1
+#raiz da asa
+
+#x, y, z da raiz do bordo de ataque, corda, incidência
+SECTION
+0 0 0    0.3 0
+#arquivo de aerofólio
+AFILE
+
+#correção p aerofólio não plano: 1 + 0.77 * (espessura/corda)
+CLAF
+1.1
+#pontos da polar de arrasto
+CDCL
+
+
+SECTION
+0 0.88 0    0.3 0
+AFILE
+
+CLAF
+1.1
+CDCL
+
+
+#estabilizador horizontal
+SURFACE
+est_hor
+10 1 20 1
+YDUPLICATE
+0
+ANGLE
+0
+COMPONENT
+2
+TRANSLATE
+1 0.05 0.1
+
+SECTION
+0 0 0    0.15 0
+CONTROL
+profundor 1 0.75 0 1 0 1
+
+SECTION
+0 0.3 0    0.15 0
+CONTROL
+profundor 1 0.75 0 1 0 1
+
+SURFACE
+est_vert
+10 1 20 1
+COMPONENT
+2
+TRANSLATE
+1 0 0.1
+
+SECTION
+0 0 0    0.15 0
+
+SECTION
+0.05 0 0.3   0.10 0
