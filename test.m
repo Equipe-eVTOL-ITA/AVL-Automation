@@ -1,6 +1,16 @@
 %adicionar info de Clmax
-%para depois: d<int> e numerado na ordem de apariçao no .avl
-%extrair infos de aerofólio automaticamente
+%para depois: d<int> e numerado na ordem de apariçao no .avl - controle
+%(trimagem)
+%extrair infos de aerofólio automaticamente?
+%documentar e segmentar funçoes de input x internas
+
+%dependencia de dados desejados x arquivos de saida e casos de execução
+%obter Vestol
+%obter Vcruz
+%obter deflexão asa
+%obter MS
+%verificar estabilidade
+%fazer um .mass?
 
 aileron = controldata("aileron", 1, 0.75, -1, 0.5, 1);
 
