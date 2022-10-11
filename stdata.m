@@ -1,5 +1,5 @@
 function stdata = stdata(stfilename)
-    text = string(fileread(stfilename)) + ".st";
+    text = string(fileread(stfilename + ".st"));
     
     %lista expansível de coeficientes
     

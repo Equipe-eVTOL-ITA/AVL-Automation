@@ -1,7 +1,7 @@
 function fsdata = fsdata(fsfilename)
     %fsdata deve conter vetor de structs
     %contendo {name, y, cl}
-    text = fileread(fsfilename);
+    text = fileread(fsfilename + ".fs");
     
     surfaces = string(split(text, "Surface #"));
     %1o elemento de surfaces é o título
