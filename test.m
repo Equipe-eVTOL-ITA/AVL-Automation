@@ -1,8 +1,10 @@
 %adicionar info de Clmax
 %para depois: d<int> e numerado na ordem de apariçao no .avl - controle
-%(trimagem)
+%adicionar trimagem
 %extrair infos de aerofólio automaticamente?
 %documentar e segmentar funçoes de input x internas
+%adicionar asas verticais (leme)
+%outputar geometria
 
 %dependencia de dados desejados x arquivos de saida e casos de execução
 %obter Vestol
@@ -16,7 +18,7 @@ aileron = controldata("aileron", 1, 0.75, -1, 0.5, 1);
 
 main = wingdata(0.25, 2.5, [0 0 0], "main", ...
     "opcao_aerofolio.dat", 0.9, ...
-    [0.52 0.06 1 0.0155 2.25 0.05], aileron);
+    [0.52 0.06 1 0.0155 2.25 0.05], 0, aileron);
 
 plane = planedata(0.625, 0.25, 2.5, 0.02, "armagedon", main);
 
