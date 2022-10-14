@@ -21,5 +21,6 @@ case1 = level_flight_case_data(15, 4, 1.23, 9.79);
 
 executeavl(plane, case1)
 %%
+%melhorar interface
 stdata1 = stdata(plane.name + "_level_flight1");
 fsdata1 = fsdata(plane.name + "_level_flight1");

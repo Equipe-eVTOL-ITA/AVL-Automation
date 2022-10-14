@@ -2,16 +2,16 @@ function wingstring = wingstring(wingdata, component)
     %caso especial: translate(2) = 0 e angle = 90 => remove YDUP e usa b,
     %não b/2
     if wingdata.translate(2) == 0 && wingdata.x_angle_degrees == 90
-        ydup = 1;
+        yduplicate_string = "";
         semispan = wingdata.b;
     else
-        ydup = 0;
+        yduplicate_string = "YDUPLICATE\n0\n";
         semispan = wingdata.b/2;
     end
     
     %angle é torção (~= x_angle_degrees) !!
     wingstring = strcat("SURFACE\n", wingdata.name, "\n15 1 40 0\n",...
-        "YDUPLICATE\n" + num2str(ydup) + "\n", "ANGLE\n0\n", "COMPONENT\n",...
+        yduplicate_string, "ANGLE\n0\n", "COMPONENT\n",...
         num2str(component), "\nTRANSLATE\n",...
         num2str(wingdata.translate), "\n");
         %adicionar seções levando em conta o controle

@@ -3,7 +3,6 @@
 %adicionar trimagem
 %extrair infos de aerofólio automaticamente?
 %documentar e segmentar funçoes de input x internas
-%adicionar asas verticais (leme)
 %outputar geometria
 
 %dependencia de dados desejados x arquivos de saida e casos de execução
