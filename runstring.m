@@ -5,7 +5,7 @@ function runstring = runstring(plane, cases)
     %melhorar como lidar com os casos
     i = 1;
     for c = cases
-        runstring = runstring + level_flight_case_string(c, plane.name+"_level_flight"+num2str(i));
+        runstring = runstring + level_flight_case_string(c, plane, i);
         i = i + 1;
     end
     runstring = runstring + "\nquit";
