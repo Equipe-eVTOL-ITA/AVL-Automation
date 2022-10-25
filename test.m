@@ -1,7 +1,4 @@
 %adicionar info de Clmax
-%para depois: d<int> e numerado na ordem de apariçao no .avl - controle
-%adicionar trimagem
-%trefftz drag tá divergindo (linha 60 do st) - por que???
 %extrair infos de aerofólio automaticamente?
 %documentar e segmentar funçoes de input x internas
 %outputar geometria

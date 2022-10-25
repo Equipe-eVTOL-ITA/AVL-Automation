@@ -1,3 +1,4 @@
+
 function stdata = stdata(stfilename, plane)
     check_string(stfilename, "stfilename")
     if ~isstruct(plane)
