@@ -4,8 +4,9 @@
 %outputar geometria
 
 %dependencia de dados desejados x arquivos de saida e casos de execução
-%obter Vestol
-%obter Vcruz
+%migrar pra casos com alpha fixo, ao invés de level_flight?
+%p baixas velocidades a trimagem não converge
+%avisar quando pode ter ocorrido problema de convergência no estol/Vcruz
 %obter deflexão asa
 %obter MS
 %verificar estabilidade
