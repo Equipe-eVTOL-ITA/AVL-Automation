@@ -16,11 +16,15 @@ function Pcruise = Pcruise(alpha, plane, aed_data)
     %cat pq acessar membros de um vetor de struct retorna elementos
     %separados, não em um vetor
     v = V(alpha, plane, aed_data);
-    CD = interp1(aed_data.alphas, cat(1, aed_data.stdata.CD), alpha);
+    %CD é aprox parabólico com alpha, 
+    CD = interp1(aed_data.alphas, cat(1, aed_data.stdata.CD), alpha, "makima");
     Pcruise = 0.5*aed_data.rho*v^3*plane.Sref*CD;
 end
 
 function V = V(alpha, plane, aed_data)
+    %dependendo do alpha, pode retornar número imaginário! no otimizador
+    %não acontece mas pode acontecer
+    %cl é aprox linear, então interpolação linear é ok
     CL = interp1(aed_data.alphas, cat(1, aed_data.stdata.CL), alpha);
     V = sqrt(aed_data.m * aed_data.g / (0.5*aed_data.rho*plane.Sref*CL));
 end
