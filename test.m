@@ -11,6 +11,7 @@
 %obter MS
 %verificar estabilidade
 %fazer um .mass?
+%atualizar check_vec p incluir caso de qq comprimento
 
 aileron = input_controldata("aileron", 1, 0.75, -1, 0.5, 1, "roll");
 
@@ -22,9 +23,9 @@ plane = input_planedata(0.625, 0.25, 2.5, 0.02, "armagedon", main);
 %%
 file_plane(plane)
 
-case1 = input_level_flight_case_data(10, 4, 1.2, 9.8);
-case2 = input_level_flight_case_data(15, 4, 1.2, 9.8);
+case1 = input_alpha_case_data(0, ["roll"]);
+case2 = input_alpha_case_data(5, "none");
 
 avl_execute_cases(plane, [case1, case2])
 %%
-stdata1 = read_stdata("armagedon_level_flight1", plane);
+stdata1 = read_stdata("armagedon1", plane);

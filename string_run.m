@@ -5,7 +5,7 @@ function runstring = string_run(plane, cases)
     %melhorar como lidar com os casos
     i = 1;
     for c = cases
-        runstring = runstring + string_level_flight_case(c, plane, i);
+        runstring = runstring + string_alpha_case(c, plane, i);
         i = i + 1;
     end
     runstring = runstring + "\nquit";
