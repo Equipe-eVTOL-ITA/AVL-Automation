@@ -19,7 +19,7 @@ plane = input_planedata(0.195*1.32, 0.195, 1.32, 0, "armagedon", [main, eh, ev])
 %%
 %problema: se velocidade baixa demais, não converge
 %migrar de level_flight pra setar alpha e trimar?
-aed_data = wrapper_aerodynamic_data(plane, -5:2:20, 4, 9.79, 1.23);
+aed_data = wrapper_aerodynamic_data(plane, -2:2:20, 4, 9.79, 1.23);
 %%
 [Vcruz, Pcruz] = get_autonomy_cruise_characteristics(plane, aed_data);
 [Vstall, a_stall] = get_stall_characteristics(plane, "main", aed_data)
