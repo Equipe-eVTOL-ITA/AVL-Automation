@@ -17,7 +17,11 @@ function Pcruise = Pcruise(alpha, plane, aed_data)
     %separados, não em um vetor
     v = V(alpha, plane, aed_data);
     %CD é aprox parabólico com alpha, 
-    CD = interp1(aed_data.alphas, cat(1, aed_data.stdata.CD), alpha, "makima");
+    CD = interp1(aed_data.alphas, cat(1, aed_data.stdata.CD), alpha, "makima", nan);
+    if isnan(CD)
+        error("Cálculo de Pcruise tentou extrapolar a curva CD(alpha) dada. alpha pedido: " ...
+            + num2str(alpha))
+    end
     Pcruise = 0.5*aed_data.rho*v^3*plane.Sref*CD;
 end
 
