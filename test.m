@@ -12,18 +12,19 @@
 %verificar estabilidade
 %fazer um .mass?
 
-aileron = controldata("aileron", 1, 0.75, -1, 0.5, 1);
+aileron = input_controldata("aileron", 1, 0.75, -1, 0.5, 1, "roll");
 
-main = wingdata(0.25, 2.5, [0 0 0], "main", ...
+main = input_wingdata(0.25, 2.5, [0 0 0], "main", ...
     "opcao_aerofolio.dat", 0.9, ...
-    [0.52 0.06 1 0.0155 2.25 0.05], 0, aileron);
+    [0.52 0.06 1 0.0155 2.25 0.05], 0, 2.25, aileron);
 
-plane = planedata(0.625, 0.25, 2.5, 0.02, "armagedon", main);
+plane = input_planedata(0.625, 0.25, 2.5, 0.02, "armagedon", main);
+%%
+file_plane(plane)
 
-plane_avl_file(plane)
+case1 = input_level_flight_case_data(10, 4, 1.2, 9.8);
+case2 = input_level_flight_case_data(15, 4, 1.2, 9.8);
 
-case1 = level_flight_case_data(10, 4, 1.2, 9.8);
-case2 = level_flight_case_data(15, 4, 1.2, 9.8);
-
-executeavl(plane, [case1, case2])
-stdata1 = stdata('armagedon_level_flight1');
+avl_execute_cases(plane, [case1, case2])
+%%
+stdata1 = read_stdata("armagedon_level_flight1", plane);

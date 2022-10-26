@@ -1,5 +1,5 @@
 %assume CM na origem
-function planedata = planedata(Sref, cref, bref, ...
+function planedata = input_planedata(Sref, cref, bref, ...
     parasite_drag, name, wingdatas)
     check_numeric(Sref, "Sref")
     check_numeric(cref, "cref")

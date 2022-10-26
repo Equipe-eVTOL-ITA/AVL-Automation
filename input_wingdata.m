@@ -1,7 +1,7 @@
 %assume asa retangular, incidência 0
 %adicionar pré-cálculo de propriedades do aerofolio
 %translate: vetor da posição do bordo de ataque
-function wingdata = wingdata(c, b, translate, name, airfoil_file, ...
+function wingdata = input_wingdata(c, b, translate, name, airfoil_file, ...
     claf, cdcl, x_angle_degrees, clmax, controldata)
     check_numeric(c, "c")
     check_numeric(b, "b")

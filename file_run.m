@@ -1,5 +1,5 @@
-function run_fn = run_avl_file(plane, cases)
-    rs = runstring(plane, cases);
+function run_fn = avl_file_run(plane, cases)
+    rs = string_run(plane, cases);
     filename = plane.name+".run";
     file = fopen(filename, "w");
     fprintf(file, rs);

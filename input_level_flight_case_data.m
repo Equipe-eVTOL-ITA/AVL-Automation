@@ -1,5 +1,5 @@
 %assume bank angle 0, cg na origem
-function level_flight_case_data = level_flight_case_data(v, m, d, g)
+function level_flight_case_data = input_level_flight_case_data(v, m, d, g)
     check_numeric(v, "v")
     level_flight_case_data.v = v;
     check_numeric(m, "m")

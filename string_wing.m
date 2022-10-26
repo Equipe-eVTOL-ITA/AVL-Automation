@@ -1,4 +1,4 @@
-function wingstring = wingstring(wingdata, component)
+function wingstring = string_wing(wingdata, component)
     %caso especial: translate(2) = 0 e angle = 90 => remove YDUP e usa b,
     %não b/2
     if wingdata.translate(2) == 0 && wingdata.x_angle_degrees == 90
@@ -52,7 +52,7 @@ function sectionstring = sectionstring(wingdata, y, hascontrol)
         num2str(wingdata.cdcl) + "\n";
     
     if hascontrol
-        sectionstring = sectionstring + controlstring(wingdata.controldata);
+        sectionstring = sectionstring + string_control(wingdata.controldata);
     end
 
 end

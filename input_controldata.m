@@ -1,7 +1,7 @@
 %3 1os parametros vem do avl (Xhinge smp 0 0 0)
 %2 ultimos indicam a fração da envergadura de inicio e fim da sup
 %contando a partir da raiz (0 = raiz, 1 = ponta)
-function controldata = controldata(name, gain, Xhinge, sgnDup, start_x_b, end_x_b, ...
+function controldata = input_controldata(name, gain, Xhinge, sgnDup, start_x_b, end_x_b, ...
         trim)
     check_string(name, "name")
     check_numeric(gain, "gain")

@@ -1,4 +1,4 @@
-function avlcall(runfilename)
+function avl_call(runfilename)
     check_string(runfilename)
     if isunix
         %echo -e "load\n armagedon\n quit" | ./avl

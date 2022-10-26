@@ -1,5 +1,5 @@
 %assume M = 0, sem simetrias, CM na origem
-function planestring = planestring(planedata)
+function planestring = string_plane(planedata)
     planestring = planedata.name + "\n0\n0 0 0\n" + ...
     string(planedata.Sref) + " " + string(planedata.cref) + ...
     " " + string(planedata.bref) + "\n0 0 0\n" + ...
@@ -7,7 +7,7 @@ function planestring = planestring(planedata)
     
     i = 1;
     for wingdata = planedata.wingdatas
-        planestring = planestring + wingstring(wingdata, i);
+        planestring = planestring + string_wing(wingdata, i);
         i = i + 1;
     end
 end

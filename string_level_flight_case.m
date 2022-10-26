@@ -1,5 +1,5 @@
 %gera FT e FS
-function lfcs = level_flight_case_string(lfcd, plane, caseid)
+function lfcs = string_level_flight_case(lfcd, plane, caseid)
     if ~isstruct(lfcd)
         error("lfcd deve ser struct do tipo level_flight_case_data")
     end
