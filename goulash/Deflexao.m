@@ -15,7 +15,8 @@ I = (1/12)*m*(3*(r2^2+r1^2)+L^2);
 %polynomial approximation 
 p = polyfit(pos, moment, 3);
 
-%integration and substitution (EIv'' = M) 
+%integration and substitution (EIv'' = M)
+syms x
 p_sym = poly2sym(p,x);
 p_deflex = int(int(p_sym,x),x);
 x_lin = linspace(0,L,1000);

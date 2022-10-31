@@ -1,3 +1,5 @@
+%m, g, rho não fazem sentido aqui! mas é bem conveniente
+%expor opções de trimagem?
 function aerodynamic_data = wrapper_aerodynamic_data(plane, alpha_range, m, g, rho)
     check_numeric(m, "m")
     check_numeric(g, "g")
