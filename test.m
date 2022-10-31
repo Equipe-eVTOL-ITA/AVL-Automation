@@ -1,12 +1,7 @@
-%adicionar info de Clmax
 %extrair infos de aerofólio automaticamente?
-%documentar e segmentar funçoes de input x internas
 %outputar geometria
 
-%dependencia de dados desejados x arquivos de saida e casos de execução
-%migrar pra casos com alpha fixo, ao invés de level_flight?
-%p baixas velocidades a trimagem não converge
-%avisar quando pode ter ocorrido problema de convergência no estol/Vcruz
+%avisar quando pode ter ocorrido problema de convergência no estol
 %obter deflexão asa
 %obter MS
 %verificar estabilidade
