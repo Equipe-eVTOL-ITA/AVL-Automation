@@ -22,4 +22,5 @@ plane = input_planedata(0.195*1.32, 0.195, 1.32, 0, "armagedon", [main, eh, ev])
 aed_data = wrapper_aerodynamic_data(plane, -2:2:20, 4, 9.79, 1.23);
 %%
 [Vcruz, Pcruz] = get_autonomy_cruise_characteristics(plane, aed_data);
-[Vstall, a_stall] = get_stall_characteristics(plane, "main", aed_data)
+[Vstall, a_stall] = get_stall_characteristics(plane, "main", aed_data);
+deflection = get_wing_deflection(plane, aed_data, 27, 2, "main", 2 * 1/4 * pi * (0.016^4 - 0.014^4), 183e9);
