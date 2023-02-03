@@ -17,7 +17,7 @@ ev = input_wingdata(0.102,0.153, [0.664 0 0], "EV", "sd8020_il_selig.dat", ...
 plane = input_planedata(0.195*1.32, 0.195, 1.32, 0, "armagedon", [main, eh, ev]);
 
 %%
-aed_data = wrapper_aerodynamic_data(plane, -2:2:20, 4, 9.79, 1.23);
+aed_data = wrapper_aerodynamic_data(plane, -2:2:20, 4.4, 9.79, 1.23);
 %%
 [Vcruz, Pcruz] = get_autonomy_cruise_characteristics(plane, aed_data);
 [Vstall, a_stall] = get_stall_characteristics(plane, "main", aed_data);
