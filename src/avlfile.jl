@@ -89,3 +89,29 @@ function avl_string(w::Wing)
         join(string.(ustrip.(u"m", w.root_position)), " ")
     ], "\n") * "\n" * prod(avl_string.(w.sections))
 end
+
+#assume mach = 0, sem simetria aerodinâmica, CG na origem (mudar)
+struct Plane
+    name::String
+    Sref::Unitful.Area
+    cref::Unitful.Length
+    bref::Unitful.Length
+    parasitic_drag::Float64
+    surfaces::Vector{Wing}
+end
+
+function avl_string(p::Plane)
+    join([
+        p.name,
+        "#número de mach",
+        "0",
+        "#não há simetria aerodinâmica",
+        "0 0 0",
+        "#área, corda, envergadura de referência",
+        join(string.([ustrip(u"m^2", p.Sref), ustrip(u"m", p.cref), ustrip(u"m", p.bref)]), " "),
+        "#centro de massa",
+        "0 0 0",
+        "#coef arrasto parasita",
+        string(p.parasitic_drag)
+    ], "\n") * "\n" * prod(avl_string.(p.surfaces))
+end
