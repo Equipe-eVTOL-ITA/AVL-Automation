@@ -1,9 +1,12 @@
 module avl_automation
 using Reexport
 @reexport using Unitful
-using StaticArrays
 
-include("wing.jl")
+module AVLFile
+using Unitful, StaticArrays
+include("avlfile.jl")
+end
+
 
 end # module
 

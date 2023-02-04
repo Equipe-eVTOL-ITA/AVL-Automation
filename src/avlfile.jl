@@ -36,7 +36,7 @@ struct WingSection
     control::Union{Nothing, Control}
 end
 
-using Base.Iterators: flatten
+using Base.Iterators
 
 function avl_string(ws::WingSection)
     join([
@@ -53,7 +53,7 @@ function avl_string(ws::WingSection)
         string(ws.claf),
         "#CL1 CD1 CL2 CD2 CL3 CD3 para o aerofólio",
         "CDCL",
-        join(flatten(zip(ws.cl, ws.cd)), " "),
+        join(Iterators.flatten(zip(ws.cl, ws.cd)), " "),
         "#controle",
         (isnothing(ws.control) ? "#não há" : avl_string(ws.control))
     ], "\n")*"\n"
