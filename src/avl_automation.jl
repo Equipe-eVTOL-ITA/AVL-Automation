@@ -10,10 +10,10 @@ end
 #todo
 #run file
 #constructors with sanity checks
+#temporary directory on precompilation/loading of package
 #avl execution
 #result representation
 #geometry abstraction
 
 
 end # module
-

@@ -24,7 +24,6 @@ function avl_string(c::Control)
     join([c.name, string(c.gain), string(c.x_c_hinge), "0 0 0", string(Int(c.sgn_dup))], " ")
 end
 
-#colocar controle
 struct WingSection 
     leading_edge_relative_to_wing_root::SVector{3, Unitful.Length}
     chord::Unitful.Length
@@ -38,7 +37,7 @@ end
 
 using Base.Iterators
 
-function avl_string(ws::WingSection)
+function avl_string(ws::WingSection)::String
     join([
         "#x, y, z do bordo de ataque, corda, incidência",
         "SECTION",
@@ -69,7 +68,7 @@ struct Wing
     sections::Vector{WingSection}
 end
 
-function avl_string(w::Wing)
+function avl_string(w::Wing)::String
     join([
         "SURFACE",
         w.name,
@@ -100,7 +99,7 @@ struct Plane
     surfaces::Vector{Wing}
 end
 
-function avl_string(p::Plane)
+function avl_string(p::Plane)::String
     join([
         p.name,
         "#número de mach",
@@ -114,4 +113,11 @@ function avl_string(p::Plane)
         "#coef arrasto parasita",
         string(p.parasitic_drag)
     ], "\n") * "\n" * prod(avl_string.(p.surfaces))
+end
+
+function write_avl_file(p::Plane, directory::String=pwd())::String
+    plane_str = avl_string(p)
+    filename = joinpath(directory, p.name*".avl")
+    open(file -> write(file, plane_str), filename, "w")
+    filename
 end
