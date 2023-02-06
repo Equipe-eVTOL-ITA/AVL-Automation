@@ -93,20 +93,20 @@ end
     
     plane = avl_automation.AVLFile.Plane("teste", 1u"m^2", 0.5u"m", 2u"m", 0.02, [wing])
 
-    ret = false
+    contents = ""
     mktempdir(directory -> begin
         
         path = avl_automation.AVLFile.write_avl_file(plane, directory)
         contents = read(path, String)
-        ret = (contents == avl_automation.AVLFile.avl_string(plane))
+        # ret = (contents == avl_automation.AVLFile.avl_string(plane))
 
     end, pwd(), prefix="test_write_avl_file_")
-    
+
+    (contents == avl_automation.AVLFile.avl_string(plane))
 end
 
-#incluir diretório de saída!
 @test begin
-    ec = avl_automation.AVLExecution.ExecutionCase(2.0u"°", [avl_automation.AVLFile.Pitch], [nothing, avl_automation.AVLFile.Pitch], "a", "./")
+    ec = avl_automation.AVLExecution.ExecutionCase(2.0u"°", [(2, avl_automation.AVLFile.Pitch)], "a", "./")
     avl_automation.AVLExecution.run_string(ec) ==
 "a
 a 2.0
@@ -118,4 +118,25 @@ fs
 st
 ./a.st
 "
+end
+
+@test begin
+    ec1 = avl_automation.AVLExecution.ExecutionCase(2.0u"°", [(2, avl_automation.AVLFile.Pitch)], "a", "./")
+    ec2 = avl_automation.AVLExecution.ExecutionCase(4.0u"°", [(2, avl_automation.AVLFile.Pitch)], "a", "./")
+    
+    ecs = avl_automation.AVLExecution.ExecutionCaseSeries("armagedon", [ec1, ec2])
+
+    contents = ""
+    mktempdir(directory -> begin
+        
+        path = avl_automation.AVLExecution.write_run_file(ecs, directory)
+        contents = read(path, String)
+
+    end, pwd(), prefix="test_write_run_file_")
+
+    contents ==
+"load
+armagedon
+oper
+" * avl_automation.AVLExecution.run_string(ec1) * avl_automation.AVLExecution.run_string(ec2) * "\nquit\n"
 end
