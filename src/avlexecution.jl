@@ -1,11 +1,13 @@
 using Unitful, StaticArrays, ..AVLFile
 
+#guardar só um plane + bool timar ou não + case_number? todo processamento na run_string
 struct ExecutionCase
     alpha::typeof(1.0u"°")
-    #permite N -> + de 1 eixo, + de 1 N -> eixo, mas não sei se é certo isso
-    #assume que todos os eixos mencionados nesse vetor devem ser trimados (responsabilidade do construtor garantir)
-    deflection_moment_pairs::Vector{Tuple{Int, Axes}}
-    output_file_title::String
+    #1sup <-> eixo de trimagem
+    controlindices_axis_pairs::Dict{Int, Axes}
+    plane_name::String
+    trim::Bool
+    case_number::Int
     output_directory::String
 end
 
@@ -22,17 +24,22 @@ end
 using Base.Iterators
 
 function run_string(ec::ExecutionCase)
+    #enumerate(getproperty.(plane.controls, :axis_to_trim))
+    trim_string = (ec.trim) ? join([
+        "d$i\n"*aux_trim_axis_to_string(a) for (i, a) in ec.controlindices_axis_pairs
+    ], "\n") : "#sem compensação"
+
+    output_file_title = ec.plane_name * string(ec.case_number)
+
     join([
         "a",
         "a " * string(ustrip(u"°", ec.alpha)),
-        [
-            "d$i\n"*aux_trim_axis_to_string(a) for (i, a) in ec.deflection_moment_pairs            
-        ]...,
+        trim_string,
         "x",
         "fs",
-        joinpath(ec.output_directory, ec.output_file_title*".fs"),
+        joinpath(ec.output_directory, output_file_title*".fs"),
         "st",
-        joinpath(ec.output_directory, ec.output_file_title*".st")
+        joinpath(ec.output_directory, output_file_title*".st")
     ], "\n")*"\n"
 end
 

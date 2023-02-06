@@ -10,7 +10,7 @@ struct Control
     x_c_hinge::Float64
     #usar XYZhvec = 0 0 0 p/ usar hinge (p. 13)
     sgn_dup::SgnDup
-    axis_to_trim::Union{Axes, Nothing}
+    axis_to_trim::Axes
 end
 
 Base.Int(sd::SgnDup) = begin
@@ -101,6 +101,18 @@ struct Plane
     bref::Unitful.Length
     parasitic_drag::Float64
     surfaces::Vector{Wing}
+    #names of control surfaces, in the order they appear in avl file 
+    controls::Vector{Control}
+    function Plane(name::String,
+        Sref::Unitful.Area,
+        cref::Unitful.Length,
+        bref::Unitful.Length,
+        parasitic_drag::Float64,
+        surfaces::Vector{Wing})
+        new(name, Sref, cref, bref, parasitic_drag, surfaces, [
+            sect.control for surf in surfaces for sect in surf.sections if !isnothing(sect.control)
+        ])
+    end
 end
 
 function avl_string(p::Plane)::String

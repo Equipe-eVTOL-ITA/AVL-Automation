@@ -1,7 +1,7 @@
 using avl_automation, Test, Unitful
 
 @test begin
-    control = avl_automation.AVLFile.Control("prof", 1.0, 0.75, avl_automation.AVLFile.Equal, nothing)
+    control = avl_automation.AVLFile.Control("prof", 1.0, 0.75, avl_automation.AVLFile.Equal, avl_automation.AVLFile.Pitch)
     avl_str = avl_automation.AVLFile.avl_string(control)
     avl_str ==
 "CONTROL
@@ -10,7 +10,7 @@ prof 1.0 0.75 0 0 0 1"
 end
 
 @test begin
-    control = avl_automation.AVLFile.Control("prof", 1.0, 0.75, avl_automation.AVLFile.Equal, nothing)
+    control = avl_automation.AVLFile.Control("prof", 1.0, 0.75, avl_automation.AVLFile.Equal, avl_automation.AVLFile.Pitch)
     sect = avl_automation.AVLFile.WingSection([0u"m", 0u"m", 0u"m"], 0.3u"m", 1u"°", 
         "naca0012_selig.dat", 1.09, [0.04703, 0.01201, 0.05415], [-1.0553, 0, 1.055], control)
     avl_str = avl_automation.AVLFile.avl_string(sect)
@@ -32,7 +32,7 @@ CDCL
 end
 
 @test begin
-    control = avl_automation.AVLFile.Control("prof", 1.0, 0.75, avl_automation.AVLFile.Equal, nothing)
+    control = avl_automation.AVLFile.Control("prof", 1.0, 0.75, avl_automation.AVLFile.Equal, avl_automation.AVLFile.Pitch)
     sect = avl_automation.AVLFile.WingSection([0u"m", 0u"m", 0u"m"], 0.3u"m", 1u"°", 
         "naca0012_selig.dat", 1.09, [0.04703, 0.01201, 0.05415], [-1.0553, 0, 1.055], control)
     wing = avl_automation.AVLFile.Wing("main", [15, 1, 40, 1], true, 1.5u"°", 2, [1.0u"m", 0u"m", 0u"m"], [sect])
@@ -58,7 +58,7 @@ TRANSLATE
 end
 
 @test begin
-    control = avl_automation.AVLFile.Control("prof", 1.0, 0.75, avl_automation.AVLFile.Equal, nothing)
+    control = avl_automation.AVLFile.Control("prof", 1.0, 0.75, avl_automation.AVLFile.Equal, avl_automation.AVLFile.Pitch)
     
     sect = avl_automation.AVLFile.WingSection([0u"m", 0u"m", 0u"m"], 0.3u"m", 1u"°", 
         "naca0012_selig.dat", 1.09, [0.04703, 0.01201, 0.05415], [-1.0553, 0, 1.055], control)
@@ -84,7 +84,7 @@ end
 end
 
 @test begin
-    control = avl_automation.AVLFile.Control("prof", 1.0, 0.75, avl_automation.AVLFile.Equal, nothing)
+    control = avl_automation.AVLFile.Control("prof", 1.0, 0.75, avl_automation.AVLFile.Equal, avl_automation.AVLFile.Pitch)
     
     sect = avl_automation.AVLFile.WingSection([0u"m", 0u"m", 0u"m"], 0.3u"m", 1u"°", 
         "naca0012_selig.dat", 1.09, [0.04703, 0.01201, 0.05415], [-1.0553, 0, 1.055], control)
@@ -106,7 +106,7 @@ end
 end
 
 @test begin
-    ec = avl_automation.AVLExecution.ExecutionCase(2.0u"°", [(2, avl_automation.AVLFile.Pitch)], "a", "./")
+    ec = avl_automation.AVLExecution.ExecutionCase(2.0u"°", Dict(2 => avl_automation.AVLFile.Pitch), "a", true, 1, "./")
     avl_automation.AVLExecution.run_string(ec) ==
 "a
 a 2.0
@@ -114,15 +114,15 @@ d2
 pm 0
 x
 fs
-./a.fs
+./a1.fs
 st
-./a.st
+./a1.st
 "
 end
 
 @test begin
-    ec1 = avl_automation.AVLExecution.ExecutionCase(2.0u"°", [(2, avl_automation.AVLFile.Pitch)], "a", "./")
-    ec2 = avl_automation.AVLExecution.ExecutionCase(4.0u"°", [(2, avl_automation.AVLFile.Pitch)], "a", "./")
+    ec1 = avl_automation.AVLExecution.ExecutionCase(2.0u"°", Dict(2 => avl_automation.AVLFile.Pitch), "a", true, 1, "./")
+    ec2 = avl_automation.AVLExecution.ExecutionCase(4.0u"°", Dict(2 => avl_automation.AVLFile.Pitch), "a", true, 1, "./")
     
     ecs = avl_automation.AVLExecution.ExecutionCaseSeries("armagedon", [ec1, ec2])
 
