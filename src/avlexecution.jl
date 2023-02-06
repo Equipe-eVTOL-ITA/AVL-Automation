@@ -58,3 +58,9 @@ function write_run_file(ecs::ExecutionCaseSeries, directory::String=pwd())::Stri
     open(file -> write(file, ecs_str), filename, "w")
     filename
 end
+
+#tornar assíncrono?
+function call_avl(run_filename::String, avl_directory::String=pwd())
+    program = joinpath(avl_directory, "avl")
+    run(pipeline(run_filename, `$program`))
+end

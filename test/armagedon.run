@@ -1,0 +1,14 @@
+load
+armagedon
+oper
+a
+a 2.0
+d2
+pm 0
+x
+fs
+./a.fs
+st
+./a.st
+
+quit

@@ -140,3 +140,14 @@ armagedon
 oper
 " * avl_automation.AVLExecution.run_string(ec1) * avl_automation.AVLExecution.run_string(ec2) * "\nquit\n"
 end
+
+@test begin
+    avl_automation.AVLExecution.call_avl("armagedon.run", dirname(@__DIR__))
+    if isfile("a.fs") && isfile("a.st")
+        rm("a.fs"); rm("a.st")
+        true
+    else
+        @warn "something wrong, please clean up test directory"
+        false
+    end
+end

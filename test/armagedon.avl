@@ -1,0 +1,101 @@
+armagedon
+0
+0 0 0
+0.2574 0.195 1.32
+0 0 0
+0
+SURFACE
+main
+15 1 40 0
+YDUPLICATE
+0
+ANGLE
+0
+COMPONENT
+1
+TRANSLATE
+0  0  0
+SECTION
+0 0 0 0.195 0
+AFILE
+naca4415_selig.dat
+CLAF
+1.1155
+CDCL
+-0.7757       0.042       0.431     0.00973      1.4245     0.11579
+SECTION
+0 0.33 0 0.195 0
+AFILE
+naca4415_selig.dat
+CLAF
+1.1155
+CDCL
+-0.7757       0.042       0.431     0.00973      1.4245     0.11579
+CONTROL
+aileron 1 0.75 0 0 0 -1
+SECTION
+0 0.66 0 0.195 0
+AFILE
+naca4415_selig.dat
+CLAF
+1.1155
+CDCL
+-0.7757       0.042       0.431     0.00973      1.4245     0.11579
+CONTROL
+aileron 1 0.75 0 0 0 -1
+SURFACE
+EH
+15 1 40 0
+YDUPLICATE
+0
+ANGLE
+0
+COMPONENT
+2
+TRANSLATE
+0.664       0.001           0
+SECTION
+0 0 0 0.12 0
+AFILE
+naca0012_selig.dat
+CLAF
+1.09
+CDCL
+-1.0553     0.04703           0     0.01201      1.0557     0.05415
+CONTROL
+profundor 1 0.75 0 0 0 1
+SECTION
+0 0.225 0 0.12 0
+AFILE
+naca0012_selig.dat
+CLAF
+1.09
+CDCL
+-1.0553     0.04703           0     0.01201      1.0557     0.05415
+CONTROL
+profundor 1 0.75 0 0 0 1
+SURFACE
+EV
+15 1 40 0
+ANGLE
+0
+COMPONENT
+3
+TRANSLATE
+0.664           0           0
+SECTION
+0 0 0 0.102 0
+AFILE
+sd8020_il_selig.dat
+CLAF
+1.1155
+CDCL
+-0.8854     0.03881      0.0001      0.0125      0.8859     0.03876
+SECTION
+0 0 0.153 0.102 0
+AFILE
+sd8020_il_selig.dat
+CLAF
+1.1155
+CDCL
+-0.8854     0.03881      0.0001      0.0125      0.8859     0.03876
