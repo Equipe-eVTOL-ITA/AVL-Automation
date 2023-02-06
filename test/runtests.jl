@@ -103,3 +103,19 @@ end
     end, pwd(), prefix="test_write_avl_file_")
     
 end
+
+#incluir diretório de saída!
+@test begin
+    ec = avl_automation.AVLExecution.ExecutionCase(2.0u"°", [avl_automation.AVLFile.Pitch], [nothing, avl_automation.AVLFile.Pitch], "a", "./")
+    avl_automation.AVLExecution.run_string(ec) ==
+"a
+a 2.0
+d2
+pm 0
+x
+fs
+./a.fs
+st
+./a.st
+"
+end

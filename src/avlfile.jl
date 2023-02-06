@@ -1,7 +1,7 @@
 using Unitful, StaticArrays
 
 
-export Axes, Control
+export Axes, Pitch, Roll, Yaw, Control
 @enum Axes Pitch Roll Yaw
 @enum SgnDup Equal Inverted
 struct Control
