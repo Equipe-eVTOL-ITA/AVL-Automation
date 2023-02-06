@@ -151,3 +151,14 @@ end
         false
     end
 end
+
+@test begin
+    st_file_res = avl_automation.AVLResults.STFileResults("armagedon1", @__DIR__)
+
+    st_file_res.alpha ≈ -2u"°" &&
+    st_file_res.CL ≈ 0.1847 &&
+    st_file_res.CD ≈ 0.01701 &&
+    st_file_res.CLa ≈ 5.196712 &&
+    st_file_res.Cma ≈ -2.479769 &&
+    st_file_res.Xnp ≈ 0.09305u"m"
+end
