@@ -1,6 +1,8 @@
-#permite futura adição de asa afilada
-abstract type AbstractWing end
+using Unitful, StaticArrays
 
+
+export Axes, Control
+@enum Axes Pitch Roll Yaw
 @enum SgnDup Equal Inverted
 struct Control
     name::String
@@ -8,6 +10,7 @@ struct Control
     x_c_hinge::Float64
     #usar XYZhvec = 0 0 0 p/ usar hinge (p. 13)
     sgn_dup::SgnDup
+    axis_to_trim::Union{Axes, Nothing}
 end
 
 Base.Int(sd::SgnDup) = begin
@@ -89,6 +92,7 @@ function avl_string(w::Wing)::String
     ], "\n") * "\n" * prod(avl_string.(w.sections))
 end
 
+export Plane
 #assume mach = 0, sem simetria aerodinâmica, CG na origem (mudar)
 struct Plane
     name::String
