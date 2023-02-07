@@ -27,8 +27,9 @@ function avl_string(c::Control)
     join([c.name, string(c.gain), string(c.x_c_hinge), "0 0 0", string(Int(c.sgn_dup))], " ")
 end
 
+export WingSection
 struct WingSection 
-    leading_edge_relative_to_wing_root::SVector{3, Unitful.Length}
+    leading_edge_relative_to_wing_root::SVector{3, <:Unitful.Length}
     chord::Unitful.Length
     incidence::typeof(1.0u"°")
     airfoil_data::String

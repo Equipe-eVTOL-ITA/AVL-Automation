@@ -162,3 +162,22 @@ end
     st_file_res.Cma ≈ -2.479769 &&
     st_file_res.Xnp ≈ 0.09305u"m"
 end
+
+@test begin
+    naca0012 = avl_automation.WingGeometry.Airfoil("naca0012_selig.dat", [-1.0553, 0, 1.055], [0.04703, 0.01201, 0.05415], @__DIR__)
+    avl_automation.WingGeometry.claf(naca0012) ≈ 1.09242618 &&
+    naca0012.x[50] ≈ 0.142201 &&
+    naca0012.y[50] ≈ 0.052625
+end
+
+@test begin
+    segment = avl_automation.WingGeometry.Airfoil(
+            "naca0012_selig.dat", [-1.0553, 0, 1.055], 
+            [0.04703, 0.01201, 0.05415], @__DIR__) |>
+        avl_automation.WingGeometry.RectangularSegment(2u"m", 0.3u"m") |>
+        avl_automation.WingGeometry.Taper(0.2)
+    segment.tip.chord == 0.2 * segment.base.chord &&
+    segment.tip.leading_edge_relative_to_wing_root[1] > segment.base.leading_edge_relative_to_wing_root[1] &&
+    segment.tip.leading_edge_relative_to_wing_root[2] > segment.base.leading_edge_relative_to_wing_root[2] &&
+    segment.tip.leading_edge_relative_to_wing_root[3] == segment.base.leading_edge_relative_to_wing_root[3]
+end
