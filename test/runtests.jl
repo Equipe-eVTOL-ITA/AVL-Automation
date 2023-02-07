@@ -170,14 +170,25 @@ end
     naca0012.y[50] ≈ 0.052625
 end
 
+#melhorar esse teste
 @test begin
     segment = avl_automation.WingGeometry.Airfoil(
             "naca0012_selig.dat", [-1.0553, 0, 1.055], 
             [0.04703, 0.01201, 0.05415], @__DIR__) |>
         avl_automation.WingGeometry.RectangularSegment(2u"m", 0.3u"m") |>
-        avl_automation.WingGeometry.Taper(0.2)
-    segment.tip.chord == 0.2 * segment.base.chord &&
-    segment.tip.leading_edge_relative_to_wing_root[1] > segment.base.leading_edge_relative_to_wing_root[1] &&
-    segment.tip.leading_edge_relative_to_wing_root[2] > segment.base.leading_edge_relative_to_wing_root[2] &&
-    segment.tip.leading_edge_relative_to_wing_root[3] == segment.base.leading_edge_relative_to_wing_root[3]
+        avl_automation.WingGeometry.Taper(0.2) |>
+        avl_automation.WingGeometry.Sweep(15u"°")
+    segment.tip.chord == 0.2 * segment.root.chord &&
+    segment.tip.leading_edge_relative_to_wing_root[1] > segment.root.leading_edge_relative_to_wing_root[1] &&
+    segment.tip.leading_edge_relative_to_wing_root[2] > segment.root.leading_edge_relative_to_wing_root[2] &&
+    segment.tip.leading_edge_relative_to_wing_root[3] == segment.root.leading_edge_relative_to_wing_root[3]
+end
+
+@test begin
+    segment = avl_automation.WingGeometry.Airfoil(
+            "naca0012_selig.dat", [-1.0553, 0, 1.055], 
+            [0.04703, 0.01201, 0.05415], @__DIR__) |>
+        avl_automation.WingGeometry.RectangularSegment(2u"m", 0.3u"m") |>
+        avl_automation.WingGeometry.Dihedral(3u"°")
+    segment.tip.leading_edge_relative_to_wing_root[3] ≈ segment.root.leading_edge_relative_to_wing_root[3] + 2u"m"*tan(3u"°")
 end

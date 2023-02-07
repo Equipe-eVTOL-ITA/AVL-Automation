@@ -19,8 +19,11 @@ end
 #change test files to coherent input-result pairs: wing with elevon
 #result representation
 #geometry abstraction + wrappers for avl
+
 module WingGeometry
 include("wing_geometry.jl")
 end
+
+@reexport using .WingGeometry
 
 end # module
