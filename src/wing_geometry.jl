@@ -81,7 +81,6 @@ function (rs::RectangularSegment)(a::Airfoil, control::Union{Nothing, Control} =
         WingSection([0.0u"m", rs.span, 0.0u"m"], rs.chord, 0u"°", a.filename, claf(a), a.cd, a.cl, control))
 end
 
-#desnecessário?
 abstract type AbstractWingTransform end
 export Taper
 struct Taper <: AbstractWingTransform
@@ -114,7 +113,7 @@ function (s::Sweep)(ws::WingSegment)
                         ws.tip.leading_edge_relative_to_wing_root[2:3]]
     new_segment
 end
-#plot 3d
+#plot 3d?
 struct Dihedral <: AbstractWingTransform
     angle::Number
 end
@@ -129,7 +128,7 @@ function (d::Dihedral)(ws::WingSegment)
     new_segment
 end
 
-#remover wing segment do código!
+#remover wing segment do código!?
 struct SectionConcatenation <: AbstractWingComponent
     sections::Vector{WingSection}
 end
@@ -145,6 +144,7 @@ end
 
 tip_segment(sc::SectionConcatenation) = WingSegment(sc.sections[end-1], sc.sections[end])
 
+#fazer transformações lazy? permitiria verificar coerência das transformações
 function (awt::AbstractWingTransform)(sc::SectionConcatenation)
     SectionConcatenation([sc.sections[1:(end-2)]; sc |> tip_segment |> awt |> sections])
 end
@@ -155,7 +155,7 @@ export NextRectangularSegment
 #colocar mudança de aerofólio opcional
 struct NextRectangularSegment <: AbstractWingTransform
     span::Unitful.Length
-    #se refere ao segmento anterior?
+    #se refere ao segmento adicionado inteiro
     control::Union{Nothing, Control, KeepControl}
 end
 
