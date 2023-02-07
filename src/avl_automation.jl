@@ -2,6 +2,7 @@ module avl_automation
 using Reexport
 @reexport using Unitful
 
+#colocar em module Internals
 module AVLFile
 include("avlfile.jl")
 end
@@ -15,10 +16,11 @@ include("avlresults.jl")
 end
 
 #todo
-#constructors with sanity checks - at least 2 sections per surface etc (affects tests!)
+#change test files to coherent input-result pairs: wing with elevon
 #result representation
-#refactor control representation
-#geometry abstraction
-
+#geometry abstraction + wrappers for avl
+module WingGeometry
+include("wing_geometry.jl")
+end
 
 end # module
