@@ -25,8 +25,8 @@ function claf(a::Airfoil)
 
     1 + 0.77 * tmax
 end
-import Plots.plot
-plot(a::Airfoil; kwargs...) = plot(a.x, a.y; kwargs...)
+using Plots
+Plots.plot(a::Airfoil; kwargs...) = Plots.plot(a.x, a.y; kwargs...)
 
 abstract type AbstractWingComponent end
 
@@ -37,23 +37,36 @@ struct WingSegment <: AbstractWingComponent
 end
 span(ws::WingSegment) = ws.tip.leading_edge_relative_to_wing_root[2] - 
                         ws.root.leading_edge_relative_to_wing_root[2]
+
+sections(ws::WingSegment) = [ws.root, ws.tip]
+#assumindo incidência 0
+x_vertexes(ws::WingSegment) = [
+    ws.root.leading_edge_relative_to_wing_root[1]
+    ws.tip.leading_edge_relative_to_wing_root[1]
+    ws.tip.leading_edge_relative_to_wing_root[1] + ws.tip.chord
+    ws.root.leading_edge_relative_to_wing_root[1] + ws.root.chord
+]
+
+y_vertexes(ws::WingSegment) = [
+    ws.root.leading_edge_relative_to_wing_root[2]
+    ws.tip.leading_edge_relative_to_wing_root[2]
+    ws.tip.leading_edge_relative_to_wing_root[2]
+    ws.root.leading_edge_relative_to_wing_root[2]
+]
+
+z_vertexes(ws::WingSegment) = [
+    ws.root.leading_edge_relative_to_wing_root[3]
+    ws.tip.leading_edge_relative_to_wing_root[3]
+    ws.tip.leading_edge_relative_to_wing_root[3]
+    ws.root.leading_edge_relative_to_wing_root[3]    
+]
+
 #plota no plano (ignora diedro)
-function plot(ws::WingSegment; kwargs...)
-    x = [
-        ws.root.leading_edge_relative_to_wing_root[1]
-        ws.tip.leading_edge_relative_to_wing_root[1]
-        ws.tip.leading_edge_relative_to_wing_root[1] + ws.tip.chord
-        ws.root.leading_edge_relative_to_wing_root[1] + ws.root.chord
-    ]
-    y = [
-        ws.root.leading_edge_relative_to_wing_root[2]
-        ws.tip.leading_edge_relative_to_wing_root[2]
-        ws.tip.leading_edge_relative_to_wing_root[2]
-        ws.root.leading_edge_relative_to_wing_root[2]
-    ]
-    plot(x, y; kwargs...)
+function Plots.plot(ws::WingSegment; kwargs...)
+    Plots.plot(x_vertexes(ws), y_vertexes(ws); kwargs...)
 end
 
+#adicionar controle aqui
 #abstract type desnecessário?
 abstract type AbstractWingPrimitive end
 export RectangularSegment
@@ -116,11 +129,61 @@ function (d::Dihedral)(ws::WingSegment)
     new_segment
 end
 
-
-struct SegmentConcatenation <: AbstractWingComponent
-    segments::Vector{WingSegment}
+#remover wing segment do código!
+struct SectionConcatenation <: AbstractWingComponent
+    sections::Vector{WingSection}
 end
 
-function Base.:*(wss...)
-    SegmentConcatenation(collect(wss))
+function Plots.plot(sc::SectionConcatenation; kwargs...)
+    p = plot(;kwargs...)
+    for (s1, s2) in zip(sc.sections[1:(end-1)], sc.sections[2:end])
+        ws = WingSegment(s1, s2)
+        p = plot!(p, x_vertexes(ws), y_vertexes(ws))
+    end
+    p
 end
+
+tip_segment(sc::SectionConcatenation) = WingSegment(sc.sections[end-1], sc.sections[end])
+
+function (awt::AbstractWingTransform)(sc::SectionConcatenation)
+    SectionConcatenation([sc.sections[1:(end-2)]; sc |> tip_segment |> awt |> sections])
+end
+
+struct KeepControl end
+
+export NextRectangularSegment
+#colocar mudança de aerofólio opcional
+struct NextRectangularSegment <: AbstractWingTransform
+    span::Unitful.Length
+    #se refere ao segmento anterior?
+    control::Union{Nothing, Control, KeepControl}
+end
+
+function (ns::NextRectangularSegment)(ws::WingSegment)
+    new_section_control = if ns.control === KeepControl()
+        ws.tip.control
+    elseif  ns.control isa Control
+        #ws.tip teria 2 controles
+        #ainda não há suporte para 2 controles/seção
+        if !isnothing(ws.tip.control)
+            error("tip of segment $ws would have 2 controls, which isn't supported yet")
+        else
+            ws = @set ws.tip.control = ns.control
+            ns.control
+        end
+    end
+
+    SectionConcatenation([
+        ws.root,
+        ws.tip,
+        WingSection(ws.tip.leading_edge_relative_to_wing_root+[0.0u"m", ns.span, 0.0u"m"],
+            ws.tip.chord,
+            0.0u"°",
+            ws.tip.airfoil_data,
+            ws.tip.claf,
+            ws.tip.cd,
+            ws.tip.cl,
+            new_section_control)
+    ])
+end
+

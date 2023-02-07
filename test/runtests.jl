@@ -190,5 +190,9 @@ end
             [0.04703, 0.01201, 0.05415], @__DIR__) |>
         avl_automation.WingGeometry.RectangularSegment(2u"m", 0.3u"m") |>
         avl_automation.WingGeometry.Dihedral(3u"°")
-    segment.tip.leading_edge_relative_to_wing_root[3] ≈ segment.root.leading_edge_relative_to_wing_root[3] + 2u"m"*tan(3u"°")
+    wing = segment |> avl_automation.WingGeometry.NextRectangularSegment(1u"m", nothing) |> avl_automation.WingGeometry.Taper(0.5)
+
+    segment.tip.leading_edge_relative_to_wing_root[3] ≈ segment.root.leading_edge_relative_to_wing_root[3] + 2u"m"*tan(3u"°") &&
+    length(wing.sections) == 3 &&
+    avl_automation.WingGeometry.tip_segment(wing).tip.chord ≈ 0.15u"m"
 end
