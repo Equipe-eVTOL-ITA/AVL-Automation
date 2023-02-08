@@ -62,6 +62,7 @@ function avl_string(ws::WingSection)::String
     ], "\n")*"\n"
 end
 
+export Wing
 struct Wing
     name::String
     vortex_distribution::SVector{4, Int}

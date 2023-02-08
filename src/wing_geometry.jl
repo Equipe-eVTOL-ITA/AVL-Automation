@@ -75,6 +75,7 @@ struct RectangularSegment <: AbstractWingPrimitive
     chord::Unitful.Length
 end
 
+#retornar section concatenation
 function (rs::RectangularSegment)(a::Airfoil, control::Union{Nothing, Control} = nothing)
     WingSegment(
         WingSection([0.0, 0.0, 0.0]*u"m", rs.chord, 0u"°", a.filename, claf(a), a.cd, a.cl, control),
@@ -185,4 +186,19 @@ function (ns::NextRectangularSegment)(ws::WingSegment)
             new_section_control)
     ])
 end
+export WingConstructor
+struct WingConstructor
+    name::String
+    vortex_distribution::SVector{4, Int}
+    is_symmetric::Bool
+    component::Int
+    root_position::SVector{3, Unitful.Length}
+end
 
+function (wc::WingConstructor)(sc::SectionConcatenation)
+    Wing(wc.name, wc.vortex_distribution, wc.is_symmetric, 0.0u"°", wc.component, wc.root_position, sc.sections)
+end
+
+function Plots.plot(w::Wing; kwargs...)
+    plot(SectionConcatenation(w.sections); kwargs...)
+end
