@@ -134,11 +134,10 @@ struct SectionConcatenation <: AbstractWingComponent
 end
 
 function Plots.plot(sc::SectionConcatenation; kwargs...)
-    p = plot(;kwargs...)
-    for (s1, s2) in zip(sc.sections[1:(end-1)], sc.sections[2:end])
-        ws = WingSegment(s1, s2)
-        p = plot!(p, x_vertexes(ws), y_vertexes(ws))
-    end
+    xs = [[sect.leading_edge_relative_to_wing_root[1] for sect in sc.sections]; 
+        [sect.leading_edge_relative_to_wing_root[1] + sect.chord for sect in reverse(sc.sections)]]
+    ys = [sect.leading_edge_relative_to_wing_root[2] for sect in cat(sc.sections, reverse(sc.sections), dims=1)]
+    p = plot(xs, ys;kwargs...)
     p
 end
 
