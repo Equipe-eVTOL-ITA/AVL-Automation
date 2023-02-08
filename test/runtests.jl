@@ -175,24 +175,24 @@ end
     segment = avl_automation.WingGeometry.Airfoil(
             "naca0012_selig.dat", [-1.0553, 0, 1.055], 
             [0.04703, 0.01201, 0.05415], @__DIR__) |>
-        avl_automation.WingGeometry.RectangularSegment(2u"m", 0.3u"m") |>
+        avl_automation.WingGeometry.RectangularSegment(2u"m", 0.3u"m", nothing) |>
         avl_automation.WingGeometry.Taper(0.2) |>
         avl_automation.WingGeometry.Sweep(15u"°")
-    segment.tip.chord == 0.2 * segment.root.chord &&
-    segment.tip.leading_edge_relative_to_wing_root[1] > segment.root.leading_edge_relative_to_wing_root[1] &&
-    segment.tip.leading_edge_relative_to_wing_root[2] > segment.root.leading_edge_relative_to_wing_root[2] &&
-    segment.tip.leading_edge_relative_to_wing_root[3] == segment.root.leading_edge_relative_to_wing_root[3]
+    segment.sections[2].chord == 0.2 * segment.sections[1].chord &&
+    segment.sections[2].leading_edge_relative_to_wing_root[1] >  segment.sections[1].leading_edge_relative_to_wing_root[1] &&
+    segment.sections[2].leading_edge_relative_to_wing_root[2] >  segment.sections[1].leading_edge_relative_to_wing_root[2] &&
+    segment.sections[2].leading_edge_relative_to_wing_root[3] == segment.sections[1].leading_edge_relative_to_wing_root[3]
 end
 
 @test begin
     segment = avl_automation.WingGeometry.Airfoil(
             "naca0012_selig.dat", [-1.0553, 0, 1.055], 
             [0.04703, 0.01201, 0.05415], @__DIR__) |>
-        avl_automation.WingGeometry.RectangularSegment(2u"m", 0.3u"m") |>
+        avl_automation.WingGeometry.RectangularSegment(2u"m", 0.3u"m", nothing) |>
         avl_automation.WingGeometry.Dihedral(3u"°")
     wing = segment |> avl_automation.WingGeometry.NextRectangularSegment(1u"m", nothing) |> avl_automation.WingGeometry.Taper(0.5)
 
-    segment.tip.leading_edge_relative_to_wing_root[3] ≈ segment.root.leading_edge_relative_to_wing_root[3] + 2u"m"*tan(3u"°") &&
+    segment.sections[2].leading_edge_relative_to_wing_root[3] ≈ segment.sections[1].leading_edge_relative_to_wing_root[3] + 2u"m"*tan(3u"°") &&
     length(wing.sections) == 3 &&
     avl_automation.WingGeometry.tip_segment(wing).tip.chord ≈ 0.15u"m"
 end

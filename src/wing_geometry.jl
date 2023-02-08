@@ -28,10 +28,8 @@ end
 using Plots
 Plots.plot(a::Airfoil; kwargs...) = Plots.plot(a.x, a.y; kwargs...)
 
-abstract type AbstractWingComponent end
-
 export WingSegment
-struct WingSegment <: AbstractWingComponent
+struct WingSegment
     root::WingSection
     tip::WingSection
 end
@@ -66,22 +64,6 @@ function Plots.plot(ws::WingSegment; kwargs...)
     Plots.plot(x_vertexes(ws), y_vertexes(ws); kwargs...)
 end
 
-#adicionar controle aqui
-#abstract type desnecessário?
-abstract type AbstractWingPrimitive end
-export RectangularSegment
-struct RectangularSegment <: AbstractWingPrimitive
-    span::Unitful.Length
-    chord::Unitful.Length
-end
-
-#retornar section concatenation
-function (rs::RectangularSegment)(a::Airfoil, control::Union{Nothing, Control} = nothing)
-    WingSegment(
-        WingSection([0.0, 0.0, 0.0]*u"m", rs.chord, 0u"°", a.filename, claf(a), a.cd, a.cl, control),
-        WingSection([0.0u"m", rs.span, 0.0u"m"], rs.chord, 0u"°", a.filename, claf(a), a.cd, a.cl, control))
-end
-
 abstract type AbstractWingTransform end
 export Taper
 struct Taper <: AbstractWingTransform
@@ -100,6 +82,7 @@ function (t::Taper)(ws::WingSegment)
                             new_segment.tip.leading_edge_relative_to_wing_root[2:3]]
     new_segment
 end
+
 export Sweep
 struct Sweep <: AbstractWingTransform
     #usar ° do unitful aqui
@@ -114,6 +97,19 @@ function (s::Sweep)(ws::WingSegment)
                         ws.tip.leading_edge_relative_to_wing_root[2:3]]
     new_segment
 end
+
+struct Verticalize <: AbstractWingTransform end
+
+#troca y e z
+function (v::Verticalize)(ws::WingSegment)
+    new_segment = @set ws.tip.leading_edge_relative_to_wing_root = [
+        ws.tip.leading_edge_relative_to_wing_root[1]
+        ws.tip.leading_edge_relative_to_wing_root[3]
+        ws.tip.leading_edge_relative_to_wing_root[2]
+    ]
+    new_segment
+end
+
 #plot 3d?
 struct Dihedral <: AbstractWingTransform
     angle::Number
@@ -130,7 +126,7 @@ function (d::Dihedral)(ws::WingSegment)
 end
 
 #remover wing segment do código!?
-struct SectionConcatenation <: AbstractWingComponent
+struct SectionConcatenation
     sections::Vector{WingSection}
 end
 
@@ -149,6 +145,21 @@ function (awt::AbstractWingTransform)(sc::SectionConcatenation)
     SectionConcatenation([sc.sections[1:(end-2)]; sc |> tip_segment |> awt |> sections])
 end
 
+export RectangularSegment
+struct RectangularSegment
+    span::Unitful.Length
+    chord::Unitful.Length
+    control::Union{Nothing, Control}
+end
+
+#retornar section concatenation
+function (rs::RectangularSegment)(a::Airfoil)
+    SectionConcatenation([
+        WingSection([0.0, 0.0, 0.0]*u"m", rs.chord, 0u"°", a.filename, claf(a), a.cd, a.cl, rs.control),
+        WingSection([0.0u"m", rs.span, 0.0u"m"], rs.chord, 0u"°", a.filename, claf(a), a.cd, a.cl, rs.control)
+    ])
+end
+
 struct KeepControl end
 
 export NextRectangularSegment
@@ -159,33 +170,33 @@ struct NextRectangularSegment <: AbstractWingTransform
     control::Union{Nothing, Control, KeepControl}
 end
 
-function (ns::NextRectangularSegment)(ws::WingSegment)
+function (ns::NextRectangularSegment)(sc::SectionConcatenation)
     new_section_control = if ns.control === KeepControl()
-        ws.tip.control
+        sc.sections[end].control
     elseif  ns.control isa Control
         #ws.tip teria 2 controles
         #ainda não há suporte para 2 controles/seção
-        if !isnothing(ws.tip.control)
-            error("tip of segment $ws would have 2 controls, which isn't supported yet")
+        if !isnothing(sc.sections[end].control)
+            error("tip of segment $(tip_segment(sc)) would have 2 controls, which isn't supported yet")
         else
-            ws = @set ws.tip.control = ns.control
+            sc = @set sc.sections[end] = ns.control
             ns.control
         end
     end
-
+    tip = sc.sections[end]
     SectionConcatenation([
-        ws.root,
-        ws.tip,
-        WingSection(ws.tip.leading_edge_relative_to_wing_root+[0.0u"m", ns.span, 0.0u"m"],
-            ws.tip.chord,
+        sc.sections...,
+        WingSection(tip.leading_edge_relative_to_wing_root+[0.0u"m", ns.span, 0.0u"m"],
+            tip.chord,
             0.0u"°",
-            ws.tip.airfoil_data,
-            ws.tip.claf,
-            ws.tip.cd,
-            ws.tip.cl,
+            tip.airfoil_data,
+            tip.claf,
+            tip.cd,
+            tip.cl,
             new_section_control)
     ])
 end
+
 export WingConstructor
 struct WingConstructor
     name::String
