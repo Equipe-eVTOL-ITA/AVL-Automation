@@ -13,7 +13,7 @@ function ControlResults(name::String, axis::Axes, index::Int, words::Vector{<:Ab
     (force_deriv, moment_deriv) = if axis == Pitch
         (get_float_from_key("CLd0$index", words)*u"°^-1", get_float_from_key("Cmd0$index", words)*u"°^-1")
     elseif axis == Yaw
-        (get_float_from_key("CLd0$index", words)*u"°^-1", get_float_from_key("Cmd0$index", words)*u"°^-1")
+        (get_float_from_key("CYd0$index", words)*u"°^-1", get_float_from_key("Cnd0$index", words)*u"°^-1")
     elseif axis == Roll
         (nothing, get_float_from_key("Cld0$index", words)*u"°^-1")
     end
