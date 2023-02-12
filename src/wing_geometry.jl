@@ -179,7 +179,7 @@ function (ns::NextRectangularSegment)(sc::SectionConcatenation)
         if !isnothing(sc.sections[end].control)
             error("tip of segment $(tip_segment(sc)) would have 2 controls, which isn't supported yet")
         else
-            sc = @set sc.sections[end] = ns.control
+            sc = @set sc.sections[end].control = ns.control
             ns.control
         end
     end

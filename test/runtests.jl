@@ -98,7 +98,6 @@ end
         
         path = avl_automation.AVLFile.write_avl_file(plane, directory)
         contents = read(path, String)
-        # ret = (contents == avl_automation.AVLFile.avl_string(plane))
 
     end, pwd(), prefix="test_write_avl_file_")
 
@@ -140,7 +139,8 @@ armagedon
 oper
 " * avl_automation.AVLExecution.run_string(ec1) * avl_automation.AVLExecution.run_string(ec2) * "\nquit\n"
 end
-
+###########################
+#tests that use the files in the test directory
 @test begin
     avl_automation.AVLExecution.call_avl("armagedon.run", dirname(@__DIR__))
     if isfile("a.fs") && isfile("a.st")
@@ -177,6 +177,8 @@ end
     naca0012.y[50] ≈ 0.052625
 end
 
+#############################
+#wing geometry tests
 #melhorar esse teste
 @test begin
     segment = avl_automation.WingGeometry.Airfoil(
@@ -197,7 +199,10 @@ end
             [0.04703, 0.01201, 0.05415], @__DIR__) |>
         avl_automation.WingGeometry.RectangularSegment(2u"m", 0.3u"m", nothing) |>
         avl_automation.WingGeometry.Dihedral(3u"°")
-    wing = segment |> avl_automation.WingGeometry.NextRectangularSegment(1u"m", nothing) |> avl_automation.WingGeometry.Taper(0.5)
+    wing = segment |> 
+        avl_automation.WingGeometry.NextRectangularSegment(1u"m", avl_automation.AVLFile.Control("aileron", 1.0, 0.75, 
+                                        avl_automation.AVLFile.Inverted, avl_automation.AVLFile.Roll)) |> 
+        avl_automation.WingGeometry.Taper(0.5)
 
     segment.sections[2].leading_edge_relative_to_wing_root[3] ≈ segment.sections[1].leading_edge_relative_to_wing_root[3] + 2u"m"*tan(3u"°") &&
     length(wing.sections) == 3 &&
