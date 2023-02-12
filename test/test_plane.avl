@@ -1,0 +1,121 @@
+test_plane
+#número de mach
+0
+#não há simetria aerodinâmica
+0 0 0
+#área, corda, envergadura de referência
+0.6 0.3 2.0
+#centro de massa
+0 0 0
+#coef arrasto parasita
+0.02
+SURFACE
+main
+#distribuição de vórtices
+15 1 40 1
+#simetria geométrica no plano y=0
+YDUPLICATE
+0
+#ângulo de incidência global
+ANGLE
+0.0
+#id de componente
+COMPONENT
+1
+#posição da raiz da asa
+TRANSLATE
+0.0 0.0 0.0
+#x, y, z do bordo de ataque, corda, incidência
+SECTION
+0.0 0.0 0.0 0.3 0.0
+#arquivo do aerofólio
+AFILE
+naca0012_selig.dat
+#correção de aerofólio espesso (p 16)
+CLAF
+1.09242618
+#CL1 CD1 CL2 CD2 CL3 CD3 para o aerofólio
+CDCL
+-1.0553 0.04703 0.0 0.01201 1.055 0.05415
+#controle
+#não há
+#x, y, z do bordo de ataque, corda, incidência
+SECTION
+0.0 1.5 0.0 0.3 0.0
+#arquivo do aerofólio
+AFILE
+naca0012_selig.dat
+#correção de aerofólio espesso (p 16)
+CLAF
+1.09242618
+#CL1 CD1 CL2 CD2 CL3 CD3 para o aerofólio
+CDCL
+-1.0553 0.04703 0.0 0.01201 1.055 0.05415
+#controle
+CONTROL
+#nome, ganho, x_c dobradiça, dobradiça 0 0 0, sinal do duplicado
+aileron 1.0 0.75 0 0 0 -1
+#x, y, z do bordo de ataque, corda, incidência
+SECTION
+0.20851007166283433 2.0 0.0 0.15 0.0
+#arquivo do aerofólio
+AFILE
+naca0012_selig.dat
+#correção de aerofólio espesso (p 16)
+CLAF
+1.09242618
+#CL1 CD1 CL2 CD2 CL3 CD3 para o aerofólio
+CDCL
+-1.0553 0.04703 0.0 0.01201 1.055 0.05415
+#controle
+CONTROL
+#nome, ganho, x_c dobradiça, dobradiça 0 0 0, sinal do duplicado
+aileron 1.0 0.75 0 0 0 -1
+SURFACE
+hstab
+#distribuição de vórtices
+15 1 40 1
+#simetria geométrica no plano y=0
+YDUPLICATE
+0
+#ângulo de incidência global
+ANGLE
+0.0
+#id de componente
+COMPONENT
+2
+#posição da raiz da asa
+TRANSLATE
+0.6 0.0 0.0
+#x, y, z do bordo de ataque, corda, incidência
+SECTION
+0.0 0.0 0.0 0.17 0.0
+#arquivo do aerofólio
+AFILE
+naca0012_selig.dat
+#correção de aerofólio espesso (p 16)
+CLAF
+1.09242618
+#CL1 CD1 CL2 CD2 CL3 CD3 para o aerofólio
+CDCL
+-1.0553 0.04703 0.0 0.01201 1.055 0.05415
+#controle
+CONTROL
+#nome, ganho, x_c dobradiça, dobradiça 0 0 0, sinal do duplicado
+profundor 1.0 0.75 0 0 0 1
+#x, y, z do bordo de ataque, corda, incidência
+SECTION
+0.012750000000000004 0.4 0.0 0.119 0.0
+#arquivo do aerofólio
+AFILE
+naca0012_selig.dat
+#correção de aerofólio espesso (p 16)
+CLAF
+1.09242618
+#CL1 CD1 CL2 CD2 CL3 CD3 para o aerofólio
+CDCL
+-1.0553 0.04703 0.0 0.01201 1.055 0.05415
+#controle
+CONTROL
+#nome, ganho, x_c dobradiça, dobradiça 0 0 0, sinal do duplicado
+profundor 1.0 0.75 0 0 0 1

@@ -1,0 +1,16 @@
+load
+test_plane
+oper
+a
+a -2.0
+d2
+pm 0
+d1
+rm 0
+x
+fs
+./tmp/test_plane1.fs
+st
+./tmp/test_plane1.st
+
+quit

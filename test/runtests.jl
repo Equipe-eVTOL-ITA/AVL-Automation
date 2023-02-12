@@ -17,7 +17,7 @@ end
     avl_str == 
 "#x, y, z do bordo de ataque, corda, incidência
 SECTION
-0 0 0 0.3 1.0
+0.0 0.0 0.0 0.3 1.0
 #arquivo do aerofólio
 AFILE
 naca0012_selig.dat
@@ -142,9 +142,12 @@ end
 ###########################
 #tests that use the files in the test directory
 @test begin
-    avl_automation.AVLExecution.call_avl("armagedon.run", dirname(@__DIR__))
-    if isfile("a.fs") && isfile("a.st")
-        rm("a.fs"); rm("a.st")
+    if !isdir(joinpath(@__DIR__, "tmp"))
+        mkdir("tmp")
+    end
+    avl_automation.AVLExecution.call_avl("test_plane.run", dirname(@__DIR__))
+    if isfile("tmp/test_plane1.fs") && isfile("tmp/test_plane1.st")
+        rm("tmp/test_plane1.fs"); rm("tmp/test_plane1.st")
         true
     else
         @warn "something wrong, please clean up test directory"
@@ -153,21 +156,31 @@ end
 end
 
 @test begin
-    controls = [
-        avl_automation.AVLFile.Control("aileron", 1.0, 0.75, avl_automation.AVLFile.Inverted, avl_automation.AVLFile.Roll),
-        avl_automation.AVLFile.Control("profundor", 1.0, 0.75, avl_automation.AVLFile.Equal, avl_automation.AVLFile.Pitch)
-    ]
-    st_file_res = avl_automation.AVLResults.STFileResults("armagedon1", controls, @__DIR__)
+    main_test_wing = Airfoil("naca0012_selig.dat", [-1.0553, 0, 1.055], [0.04703, 0.01201, 0.05415], @__DIR__) |>
+       RectangularSegment(1.5u"m", 30u"cm", nothing) |>
+       NextRectangularSegment(0.5u"m", avl_automation.AVLFile.Control("aileron", 1.0, 0.75, avl_automation.AVLFile.Inverted, avl_automation.AVLFile.Roll)) |>
+       Taper(0.5) |>
+       Sweep(20u"°") |>
+       WingConstructor("main", [15, 1, 40, 1], true, 1, [0, 0, 0]u"m")
+    
+    hstab_test = Airfoil("naca0012_selig.dat", [-1.0553, 0, 1.055], [0.04703, 0.01201, 0.05415], @__DIR__) |>
+       RectangularSegment(0.4u"m", 17u"cm", avl_automation.AVLFile.Control("profundor", 1.0, 0.75, avl_automation.AVLFile.Equal, avl_automation.AVLFile.Pitch)) |>
+       Taper(0.7) |>
+       WingConstructor("hstab", [15, 1, 40, 1], true, 2, [60u"cm", 0u"m", 0u"m"])
+
+    test_plane = avl_automation.AVLFile.Plane("test_plane", 0.6u"m^2", 0.3u"m", 2u"m", 0.02, [main_test_wing, hstab_test])
+    
+    st_file_res = avl_automation.AVLResults.STFileResults("test_plane1", test_plane.controls, @__DIR__)
 
     st_file_res.alpha ≈ -2u"°" &&
-    st_file_res.CL ≈ 0.1847 &&
-    st_file_res.CD ≈ 0.01701 &&
-    st_file_res.CLa ≈ 5.196712 &&
-    st_file_res.Cma ≈ -2.479769 &&
-    st_file_res.Xnp ≈ 0.09305u"m" &&
-    st_file_res.control_results[1].deflection ≈ 0.00003u"°" &&
-    st_file_res.control_results[2].force_derivative ≈ 0.008237u"°^-1" &&
-    st_file_res.control_results[2].moment_derivative ≈ -0.028921u"°^-1"
+    st_file_res.CL ≈ -0.31970 &&
+    st_file_res.CD ≈ 0.04930 &&
+    st_file_res.CLa ≈ 11.383851 &&
+    st_file_res.Cma ≈ -4.083255 &&
+    st_file_res.Xnp ≈ 0.107607u"m" &&
+    st_file_res.control_results[1].deflection ≈ -0.00000u"°" &&
+    st_file_res.control_results[2].force_derivative ≈ 0.011736u"°^-1" &&
+    st_file_res.control_results[2].moment_derivative ≈ -0.021467u"°^-1"
 end
 
 @test begin
