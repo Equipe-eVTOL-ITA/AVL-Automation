@@ -1,6 +1,7 @@
 using Unitful, StaticArrays, ..AVLFile
 
 #guardar só um plane + bool timar ou não + case_number? todo processamento na run_string
+export ExecutionCase
 struct ExecutionCase
     alpha::typeof(1.0u"°")
     #1sup <-> eixo de trimagem
@@ -44,6 +45,7 @@ function run_string(ec::ExecutionCase)
 end
 
 #melhorar nome
+export ExecutionCaseSeries
 struct ExecutionCaseSeries
     plane_name::String
     cases::Vector{ExecutionCase}
