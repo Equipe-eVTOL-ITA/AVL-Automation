@@ -153,14 +153,21 @@ end
 end
 
 @test begin
-    st_file_res = avl_automation.AVLResults.STFileResults("armagedon1", @__DIR__)
+    controls = [
+        avl_automation.AVLFile.Control("aileron", 1.0, 0.75, avl_automation.AVLFile.Inverted, avl_automation.AVLFile.Roll),
+        avl_automation.AVLFile.Control("profundor", 1.0, 0.75, avl_automation.AVLFile.Equal, avl_automation.AVLFile.Pitch)
+    ]
+    st_file_res = avl_automation.AVLResults.STFileResults("armagedon1", controls, @__DIR__)
 
     st_file_res.alpha ≈ -2u"°" &&
     st_file_res.CL ≈ 0.1847 &&
     st_file_res.CD ≈ 0.01701 &&
     st_file_res.CLa ≈ 5.196712 &&
     st_file_res.Cma ≈ -2.479769 &&
-    st_file_res.Xnp ≈ 0.09305u"m"
+    st_file_res.Xnp ≈ 0.09305u"m" &&
+    st_file_res.control_results[1].deflection ≈ 0.00003u"°" &&
+    st_file_res.control_results[2].force_derivative ≈ 0.008237u"°^-1" &&
+    st_file_res.control_results[2].moment_derivative ≈ -0.028921u"°^-1"
 end
 
 @test begin
