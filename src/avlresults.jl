@@ -20,7 +20,7 @@ function ControlResults(name::String, axis::Axes, index::Int, words::Vector{<:Ab
     ControlResults(name, deflection, force_deriv, moment_deriv)
 end
 
-#ignora tudo relacionado ao controle
+#todo: derivadas dinâmicas
 struct STFileResults
     alpha::typeof(1.0u"°")
     CL::Float64
