@@ -1,9 +1,10 @@
 using Unitful, StaticArrays
 
 
-export Axes, Pitch, Roll, Yaw, Control
+export Axes, Pitch, Roll, Yaw, Control, SgnDup, Equal, Inverted
 @enum Axes Pitch Roll Yaw
 @enum SgnDup Equal Inverted
+export Control
 struct Control
     name::String
     gain::Float64
@@ -45,9 +46,9 @@ function avl_string(ws::WingSection)::String
     join([
         "#x, y, z do bordo de ataque, corda, incidência",
         "SECTION",
-        join(string.(ustrip.(u"m", ws.leading_edge_relative_to_wing_root)), " ") *
-            " " * string(ustrip(u"m", ws.chord)) *
-            " " * string(ustrip(u"°", ws.incidence)),
+        join(string.(ustrip.(Float64, u"m", ws.leading_edge_relative_to_wing_root)), " ") *
+            " " * string(ustrip(Float64, u"m", ws.chord)) *
+            " " * string(ustrip(Float64, u"°", ws.incidence)),
         "#arquivo do aerofólio",
         "AFILE",
         ws.airfoil_data,
@@ -62,6 +63,7 @@ function avl_string(ws::WingSection)::String
     ], "\n")*"\n"
 end
 
+#cálculo de área, cma de asa, etc
 export Wing
 struct Wing
     name::String
@@ -84,13 +86,13 @@ function avl_string(w::Wing)::String
         (w.is_symmetric) ? "0" : "#####",
         "#ângulo de incidência global",
         "ANGLE",
-        string(ustrip(u"°", w.incidence)),
+        string(ustrip(Float64, u"°", w.incidence)),
         "#id de componente",
         "COMPONENT",
         string(w.component),
         "#posição da raiz da asa",
         "TRANSLATE",
-        join(string.(ustrip.(u"m", w.root_position)), " ")
+        join(string.(ustrip.(Float64, u"m", w.root_position)), " ")
     ], "\n") * "\n" * prod(avl_string.(w.sections))
 end
 
@@ -105,15 +107,15 @@ struct Plane
     surfaces::Vector{Wing}
     #names of control surfaces, in the order they appear in avl file 
     controls::Vector{Control}
+    #melhorar construtor
     function Plane(name::String,
         Sref::Unitful.Area,
         cref::Unitful.Length,
         bref::Unitful.Length,
         parasitic_drag::Float64,
         surfaces::Vector{Wing})
-        new(name, Sref, cref, bref, parasitic_drag, surfaces, [
-            sect.control for surf in surfaces for sect in surf.sections if !isnothing(sect.control)
-        ])
+        unique_controls = unique(x -> x.name, [sect.control for surf in surfaces for sect in surf.sections if !isnothing(sect.control)])
+        new(name, Sref, cref, bref, parasitic_drag, surfaces, unique_controls)
     end
 end
 
@@ -125,7 +127,7 @@ function avl_string(p::Plane)::String
         "#não há simetria aerodinâmica",
         "0 0 0",
         "#área, corda, envergadura de referência",
-        join(string.([ustrip(u"m^2", p.Sref), ustrip(u"m", p.cref), ustrip(u"m", p.bref)]), " "),
+        join(string.([ustrip(Float64, u"m^2", p.Sref), ustrip(Float64, u"m", p.cref), ustrip(Float64, u"m", p.bref)]), " "),
         "#centro de massa",
         "0 0 0",
         "#coef arrasto parasita",
