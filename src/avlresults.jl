@@ -21,6 +21,7 @@ function ControlResults(name::String, axis::Axes, index::Int, words::Vector{<:Ab
 end
 
 #todo: derivadas dinâmicas
+#todo: apenas uma struct de resultados
 struct STFileResults
     alpha::typeof(1.0u"°")
     CL::Float64
@@ -44,4 +45,33 @@ function STFileResults(filetitle::String, controls::Vector{Control}, directory::
         get_float_from_key("Xnp", words) * u"m",
         [ControlResults(control.name, control.axis_to_trim, index, words) for (index, control) in enumerate(controls)]
     )
+end
+
+struct WingResult
+    name::String
+    y::Vector{Unitful.Length}
+    cl::Vector{Float64}
+end
+
+function WingResult(surface_str::AbstractString)
+    lines = split(surface_str, '\n')
+    name = join(split(lines[1])[2:end], " ")
+
+    entries = split.(lines[17:end-2])
+
+
+    y = parse.(Float64, getindex.(entries, 3)) .* u"m"
+    cl = parse.(Float64, getindex.(entries, 10))
+
+    WingResult(String(name), y, cl)
+end
+
+struct FSFileResults
+    wing_results::Vector{WingResult}
+end
+
+function FSFileResults(filetitle::String, directory::String=pwd())
+    surface_strs = split(read(joinpath(directory, filetitle*".fs"), String), "Surface #")[2:end]
+    
+    FSFileResults(WingResult.(surface_strs))
 end

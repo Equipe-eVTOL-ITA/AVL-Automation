@@ -184,6 +184,57 @@ end
 end
 
 @test begin
+    fs_file_results = avl_automation.AVLResults.FSFileResults("test_plane1", @__DIR__)
+
+    length(fs_file_results.wing_results) == 4 &&
+    fs_file_results.wing_results[2].name == "main (YDUP)" &&
+    all(fs_file_results.wing_results[2].y .≈ [
+        -0.0008
+        -0.0068
+        -0.0189
+        -0.0370
+        -0.0609
+        -0.0905
+        -0.1256
+        -0.1660
+        -0.2115
+        -0.2618
+        -0.3165
+        -0.3753
+        -0.4379
+        -0.5038
+        -0.5727
+        -0.6442
+        -0.7178
+        -0.7930
+        -0.8694
+        -0.9465
+        -1.0239
+        -1.1010
+        -1.1774
+        -1.2527
+        -1.3262
+        -1.3977
+        -1.4666
+        -1.5346
+        -1.6011
+        -1.6637
+        -1.7218
+        -1.7752
+        -1.8235
+        -1.8665
+        -1.9038
+        -1.9353
+        -1.9607
+        -1.9799
+        -1.9927
+        -1.9992
+    ]u"m") &&
+    fs_file_results.wing_results[2].cl[1] ≈ -0.2039
+end
+
+
+@test begin
     naca0012 = avl_automation.WingGeometry.Airfoil("naca0012_selig.dat", [-1.0553, 0, 1.055], [0.04703, 0.01201, 0.05415], @__DIR__)
     avl_automation.WingGeometry.claf(naca0012) ≈ 1.09242618 &&
     naca0012.x[50] ≈ 0.142201 &&

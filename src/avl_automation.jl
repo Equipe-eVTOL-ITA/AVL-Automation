@@ -19,9 +19,8 @@ end
 
 #todo
 #display of objects
-#change test files to coherent input-result pairs: wing with elevon
 #result representation
-#geometry abstraction + wrappers for avl
+#wrappers for avl execution
 
 module WingGeometry
 include("wing_geometry.jl")
