@@ -1,7 +1,7 @@
 module avl_automation
 using Reexport
 @reexport using Unitful
-
+@reexport using Plots
 #colocar em module Internals
 module AVLFile
 include("avlfile.jl")
@@ -18,9 +18,9 @@ include("avlresults.jl")
 end
 
 #todo
-#reexport plot
+#plot control surfaces
 #display of objects
-#result representation
+#wing area, cma, etc calculation
 #wrappers for avl execution
 #simplify directory-related arguments and select better defaults
 
