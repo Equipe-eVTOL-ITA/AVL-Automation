@@ -21,7 +21,7 @@ function ControlResults(name::String, axis::Axes, index::Int, words::Vector{<:Ab
 end
 
 #todo: derivadas dinâmicas
-#todo: apenas uma struct de resultados
+#todo: apenas uma struct de resultados!!!
 struct STFileResults
     alpha::typeof(1.0u"°")
     CL::Float64
@@ -74,4 +74,30 @@ function FSFileResults(filetitle::String, directory::String=pwd())
     surface_strs = split(read(joinpath(directory, filetitle*".fs"), String), "Surface #")[2:end]
     
     FSFileResults(WingResult.(surface_strs))
+end
+export CaseResults
+struct CaseResults
+    filetitle::String
+    alpha::typeof(1.0u"°")
+    CL::Float64
+    CD::Float64
+    CLa::Float64
+    Cma::Float64
+    Xnp::Unitful.Length
+    control_results::Vector{ControlResults}
+    wing_results::Vector{WingResult}
+end
+
+function CaseResults(filetitle::String, controls::Vector{Control}, directory::String=pwd())
+    stdata = STFileResults(filetitle, controls, directory)
+    fsdata = FSFileResults(filetitle, directory)
+    CaseResults(filetitle,
+        stdata.alpha,
+        stdata.CL,
+        stdata.CD,
+        stdata.CLa,
+        stdata.Cma,
+        stdata.Xnp,
+        stdata.control_results,
+        fsdata.wing_results)
 end

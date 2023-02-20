@@ -134,7 +134,7 @@ function Plots.plot(sc::SectionConcatenation; kwargs...)
     xs = [[sect.leading_edge_relative_to_wing_root[1] for sect in sc.sections]; 
         [sect.leading_edge_relative_to_wing_root[1] + sect.chord for sect in reverse(sc.sections)]]
     ys = [sect.leading_edge_relative_to_wing_root[2] for sect in cat(sc.sections, reverse(sc.sections), dims=1)]
-    p = plot(xs, ys;kwargs...)
+    p = Plots.plot(xs, ys;kwargs...)
     p
 end
 
@@ -211,5 +211,5 @@ function (wc::WingConstructor)(sc::SectionConcatenation)
 end
 
 function Plots.plot(w::Wing; kwargs...)
-    plot(SectionConcatenation(w.sections); kwargs...)
+    Plots.plot(SectionConcatenation(w.sections); kwargs...)
 end

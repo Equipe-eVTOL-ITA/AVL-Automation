@@ -134,7 +134,7 @@ function avl_string(p::Plane)::String
         string(p.parasitic_drag)
     ], "\n") * "\n" * prod(avl_string.(p.surfaces))
 end
-
+export write_avl_file
 function write_avl_file(p::Plane, directory::String=pwd())::String
     plane_str = avl_string(p)
     filename = joinpath(directory, p.name*".avl")

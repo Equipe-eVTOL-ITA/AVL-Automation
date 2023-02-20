@@ -1,15 +1,20 @@
 using Unitful, StaticArrays, ..AVLFile
 
 #guardar só um plane + bool timar ou não + case_number? todo processamento na run_string
+#assume beta = 0
 export ExecutionCase
 struct ExecutionCase
     alpha::typeof(1.0u"°")
-    #1sup <-> eixo de trimagem
+    #sup controle <-> eixo de compensação
     controlindices_axis_pairs::Dict{Int, Axes}
     plane_name::String
     trim::Bool
     case_number::Int
     output_directory::String
+end
+
+function ExecutionCase(alpha, plane::Plane, trim::Bool, case_number::Int, output_directory::String)
+    ExecutionCase(alpha, Dict(index => c.axis_to_trim for (index, c) in enumerate(plane.controls)), plane.name, trim, case_number, output_directory)
 end
 
 aux_trim_axis_to_string(a::Axes) = begin
@@ -60,7 +65,7 @@ function run_string(ecs::ExecutionCaseSeries)
         "quit"
     ], "\n")*"\n"
 end
-
+export write_run_file
 function write_run_file(ecs::ExecutionCaseSeries, directory::String=pwd())::String
     ecs_str = run_string(ecs)
     filename = joinpath(directory, ecs.plane_name*".run")
@@ -68,6 +73,7 @@ function write_run_file(ecs::ExecutionCaseSeries, directory::String=pwd())::Stri
     filename
 end
 
+export call_avl
 #tornar assíncrono?
 function call_avl(run_filename::String, avl_directory::String=pwd())
     program = joinpath(avl_directory, "avl")
