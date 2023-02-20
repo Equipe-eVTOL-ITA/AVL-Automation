@@ -21,8 +21,8 @@ end
 #plot control surfaces
 #display of objects
 #wing area, cma, etc calculation
-#wrappers for avl execution
-#simplify directory-related arguments and select better defaults
+#post-processing: stability, cruise/stall speed, wing FEM
+#cleanup exports and visibility
 
 module WingGeometry
 include("wing_geometry.jl")
