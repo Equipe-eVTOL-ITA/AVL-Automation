@@ -1,5 +1,5 @@
 using ..AVLFile, ..AVLExecution, ..AVLResults, Unitful
-
+export analyse_plane
 function analyse_plane(plane::Plane, trim::Bool, alphas::AbstractVector, output_directory::String)
     write_avl_file(plane)
     ecs = ExecutionCaseSeries(plane.name, [
