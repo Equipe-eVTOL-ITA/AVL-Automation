@@ -34,4 +34,5 @@ module PlaneAnalysis
 include("plane_analysis.jl")
 end
 
+@reexport using .PlaneAnalysis
 end # module
