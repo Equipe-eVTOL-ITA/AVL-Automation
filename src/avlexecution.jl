@@ -66,7 +66,7 @@ function run_string(ecs::ExecutionCaseSeries)
     ], "\n")*"\n"
 end
 export write_run_file
-function write_run_file(ecs::ExecutionCaseSeries, directory::String=pwd())::String
+function write_run_file(ecs::ExecutionCaseSeries, directory::String)::String
     ecs_str = run_string(ecs)
     filename = joinpath(directory, ecs.plane_name*".run")
     open(file -> write(file, ecs_str), filename, "w")
@@ -75,7 +75,7 @@ end
 
 export call_avl
 #tornar assíncrono?
-function call_avl(run_filename::String, avl_directory::String=pwd())
+function call_avl(run_filename::String, avl_directory::String=dirname(@__DIR__))
     program = joinpath(avl_directory, "avl")
     run(pipeline(run_filename, `$program`))
 end

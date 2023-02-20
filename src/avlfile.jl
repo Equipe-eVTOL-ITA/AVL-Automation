@@ -135,7 +135,7 @@ function avl_string(p::Plane)::String
     ], "\n") * "\n" * prod(avl_string.(p.surfaces))
 end
 export write_avl_file
-function write_avl_file(p::Plane, directory::String=pwd())::String
+function write_avl_file(p::Plane, directory::String)::String
     plane_str = avl_string(p)
     filename = joinpath(directory, p.name*".avl")
     open(file -> write(file, plane_str), filename, "w")
