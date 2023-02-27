@@ -4,7 +4,7 @@ using Reexport
 @reexport using Unitful
 @reexport using Plots
 
-#colocar em module Internals?
+####### módulos internos
 "Descrição da geometria do avião e criação do arquivo .avl"
 module AVLFile
 include("avlfile.jl")
@@ -21,6 +21,7 @@ end
 module AVLResults
 include("avlresults.jl")
 end
+######### fim dos módulos internos
 
 #todo
 #make vortex_distribution option more fine grained (better represent control surfaces, taper changes, etc)
