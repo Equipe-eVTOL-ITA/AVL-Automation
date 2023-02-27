@@ -12,6 +12,7 @@ end
 #deixar privado?
 @reexport using .AVLFile
 
+"Entradas para execução do AVL, criação do arquivo .run e execução do AVL"
 module AVLExecution
 include("avlexecution.jl")
 end

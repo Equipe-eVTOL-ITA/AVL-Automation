@@ -3,6 +3,9 @@ using Unitful, StaticArrays, ..AVLFile
 #guardar só um plane + bool timar ou não + case_number? todo processamento na run_string
 #assume beta = 0
 export ExecutionCase
+"Representação dos dados de entrada de um caso de execução do AVL, com ângulo de ataque fixo.
+
+Pode ser compensado ou não."
 struct ExecutionCase
     alpha::typeof(1.0u"°")
     #sup controle <-> eixo de compensação
@@ -29,6 +32,11 @@ end
 
 using Base.Iterators
 
+"""
+    run_string(ec::ExecutionCase)
+
+Retorna o texto correspondente a um caso de execução, no formato do arquivo .run.
+"""
 function run_string(ec::ExecutionCase)
     #enumerate(getproperty.(plane.controls, :axis_to_trim))
     trim_string = (ec.trim) ? join([
@@ -51,11 +59,27 @@ end
 
 #melhorar nome
 export ExecutionCaseSeries
+"""Representação de série de casos de execução.
+
+No AVL, é mais eficiente rodar muitos casos em uma sessão do que rodar várias seções com 
+um caso cada, devido à fatoração de uma matriz referente à geometria do avião.
+"""
 struct ExecutionCaseSeries
     plane_name::String
     cases::Vector{ExecutionCase}
 end
 
+"""
+    run_string(ecs::ExecutionCaseSeries)
+
+Retorna o texto referente à execução de uma série de casos no AVL.
+
+Este texto inclui toda a informação necessária para a criação de um arquivo .run,
+inclusive o carregamento da geometria.
+
+**OBS**: assume que o arquivo .avl está no diretório de execução do AVL, o que é incompatível com
+arquivos .avl salvos em outros diretórios (consertar!)
+"""
 function run_string(ecs::ExecutionCaseSeries)
     join([
         "load",
@@ -65,7 +89,13 @@ function run_string(ecs::ExecutionCaseSeries)
         "quit"
     ], "\n")*"\n"
 end
+
 export write_run_file
+"""
+    write_run_file(ecs::ExecutionCaseSeries, directory::String)::String
+
+Cria um arquivo .run na pasta `directory` e retorna seu caminho.
+"""
 function write_run_file(ecs::ExecutionCaseSeries, directory::String)::String
     ecs_str = run_string(ecs)
     filename = joinpath(directory, ecs.plane_name*".run")
@@ -75,6 +105,13 @@ end
 
 export call_avl
 #tornar assíncrono?
+"""
+    call_avl(run_filename::String, avl_directory::String=dirname(@__DIR__))
+
+Executa o AVL.
+
+Por padrão, usa o executável encontrado na raíz do projeto, acima do diretório `src/`.
+"""
 function call_avl(run_filename::String, avl_directory::String=dirname(@__DIR__))
     program = joinpath(avl_directory, "avl")
     run(pipeline(run_filename, `$program`))
