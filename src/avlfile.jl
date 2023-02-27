@@ -2,9 +2,14 @@ using Unitful, StaticArrays
 
 
 export Axes, Pitch, Roll, Yaw, Control, SgnDup, Equal, Inverted
+"Eixos de controle possíveis: Pitch (arfagem), Roll (rolagem), Yaw (guinada)"
 @enum Axes Pitch Roll Yaw
+
+"Opções de sinal da deflexão do reflexo da superfície de controle: Equal (mesmo sentido, usar p/ profundores), Inverted (ailerons)"
 @enum SgnDup Equal Inverted
+
 export Control
+"Representação de superfície de controle"
 struct Control
     name::String
     gain::Float64
@@ -14,6 +19,11 @@ struct Control
     axis_to_trim::Axes
 end
 
+"""
+    Base.Int(sd::SgnDup)
+
+Converte o enum SgnDup em um Int para criação do arquivo AVL.
+"""
 Base.Int(sd::SgnDup) = begin
     if sd == Equal
         1
@@ -22,6 +32,11 @@ Base.Int(sd::SgnDup) = begin
     end
 end
 
+"""
+    avl_string(c::Control)
+
+Retorna o texto correspondente ao controle de uma seção no formato do arquivo AVL.
+"""
 function avl_string(c::Control)
     "CONTROL\n" *
     "#nome, ganho, x_c dobradiça, dobradiça 0 0 0, sinal do duplicado\n" * 
@@ -29,6 +44,7 @@ function avl_string(c::Control)
 end
 
 export WingSection
+"Representação de uma seção de asa."
 struct WingSection 
     leading_edge_relative_to_wing_root::SVector{3, <:Unitful.Length}
     chord::Unitful.Length
@@ -42,6 +58,11 @@ end
 
 using Base.Iterators
 
+"""
+    avl_string(ws::WingSection)
+
+Retorna o texto 
+"""
 function avl_string(ws::WingSection)::String
     join([
         "#x, y, z do bordo de ataque, corda, incidência",
