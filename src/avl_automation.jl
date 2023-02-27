@@ -1,8 +1,11 @@
 module avl_automation
+
 using Reexport
 @reexport using Unitful
 @reexport using Plots
-#colocar em module Internals
+
+#colocar em module Internals?
+"Descrição da geometria do avião e criação do arquivo .avl"
 module AVLFile
 include("avlfile.jl")
 end

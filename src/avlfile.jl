@@ -33,11 +33,11 @@ Base.Int(sd::SgnDup) = begin
 end
 
 """
-    avl_string(c::Control)
+    avl_string(c::Control)::String
 
 Retorna o texto correspondente ao controle de uma seção no formato do arquivo AVL.
 """
-function avl_string(c::Control)
+function avl_string(c::Control)::String
     "CONTROL\n" *
     "#nome, ganho, x_c dobradiça, dobradiça 0 0 0, sinal do duplicado\n" * 
     join([c.name, string(c.gain), string(c.x_c_hinge), "0 0 0", string(Int(c.sgn_dup))], " ")
@@ -59,9 +59,9 @@ end
 using Base.Iterators
 
 """
-    avl_string(ws::WingSection)
+    avl_string(ws::WingSection)::String
 
-Retorna o texto 
+Retorna o texto correspondente a uma seção de asa no formato do arquivo AVL.
 """
 function avl_string(ws::WingSection)::String
     join([
@@ -86,6 +86,7 @@ end
 
 #cálculo de área, cma de asa, etc
 export Wing
+"Representação de superfície aerodinâmica."
 struct Wing
     name::String
     vortex_distribution::SVector{4, Int}
@@ -96,6 +97,11 @@ struct Wing
     sections::Vector{WingSection}
 end
 
+"""
+    avl_string(w::Wing)::String
+
+Retorna o texto correspondente a uma superfície aerodinâmica no formato do arquivo AVL.
+"""
 function avl_string(w::Wing)::String
     join([
         "SURFACE",
@@ -118,7 +124,11 @@ function avl_string(w::Wing)::String
 end
 
 export Plane
-#assume mach = 0, sem simetria aerodinâmica, CG na origem (mudar)
+"""
+Representação de avião completo.
+
+Assume M = 0 (escoamento incompressível), não há simetria aerodinâmica, CG na origem.
+"""
 struct Plane
     name::String
     Sref::Unitful.Area
@@ -140,6 +150,13 @@ struct Plane
     end
 end
 
+"""
+    avl_string(p::Plane)::String
+
+Retorna o texto correspondente a um avião no formato do arquivo AVL.
+
+Esta função retorna todo o texto necessário para criar um arquivo AVL.
+"""
 function avl_string(p::Plane)::String
     join([
         p.name,
@@ -155,7 +172,15 @@ function avl_string(p::Plane)::String
         string(p.parasitic_drag)
     ], "\n") * "\n" * prod(avl_string.(p.surfaces))
 end
+
 export write_avl_file
+
+"""
+    write_avl_file(p::Plane, directory::String)::String
+
+Cria um arquivo .avl com a descrição da geometria do avião e retorna o caminho do arquivo.
+O caminho do arquivo criado é `directory + <nome do avião>.avl`
+"""
 function write_avl_file(p::Plane, directory::String)::String
     plane_str = avl_string(p)
     filename = joinpath(directory, p.name*".avl")
