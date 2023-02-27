@@ -1,6 +1,13 @@
 using Unitful, StaticArrays, ..AVLFile
 
 export Airfoil
+"""Representação de aerofólio com as informações necessárias para plot e entrada no AVL.
+
+Os vetores `cl`, `cd` devem conter 3 elementos cada, com o coeficiente próximo da região
+de estol negativo, próximo da região de Cd mínimo, e próximo da região de estol positivo.
+
+A importação de um aerofólio é o primeiro passo na criação de uma asa.
+"""
 struct Airfoil
     x::Vector{Float64}
     y::Vector{Float64}
@@ -18,6 +25,14 @@ end
 
 max_diff(vec) = maximum(vec) - minimum(vec)
 
+"""
+    claf(a::Airfoil)
+
+Retorna um coeficiente de correção de Cla para o aerofólio fornecido.
+
+Aplica a fórmula ``1 + 0.77 * tₘₐₓ``, onde ``tₘₐₓ`` representa a espessura
+máxima do aerofólio (página 16 do User Primer)
+"""
 function claf(a::Airfoil)
     unique_x = unique(a.x)
 
@@ -25,18 +40,27 @@ function claf(a::Airfoil)
 
     1 + 0.77 * tmax
 end
+
 using Plots
 Plots.plot(a::Airfoil; kwargs...) = Plots.plot(a.x, a.y; kwargs...)
 
 export WingSegment
+"""
+Representação de segmento de asa através de uma seção raiz e uma seção de ponta.
+
+Necessário para usar as transformações geométricas desejadas e garantir que sempre há um
+número válido de seções (>= 2).
+"""
 struct WingSegment
     root::WingSection
     tip::WingSection
 end
+
 span(ws::WingSegment) = ws.tip.leading_edge_relative_to_wing_root[2] - 
                         ws.root.leading_edge_relative_to_wing_root[2]
 
 sections(ws::WingSegment) = [ws.root, ws.tip]
+
 #assumindo incidência 0
 x_vertexes(ws::WingSegment) = [
     ws.root.leading_edge_relative_to_wing_root[1]
@@ -64,8 +88,30 @@ function Plots.plot(ws::WingSegment; kwargs...)
     Plots.plot(x_vertexes(ws), y_vertexes(ws); kwargs...)
 end
 
+export AbstractWingTransform
+"""
+Transformações aplicáveis a um segmento de asa.
+
+Devem ser aplicadas a uma sequência de segmentos
+(SectionConcatenation) com a sintaxe `objeto_taper(sequência de segmentos)`,
+ou ainda com o operador pipe `|>` (método sugerido). Esta aplicação retorna um novo objeto do 
+mesmo tipo, com a transformação aplicada.
+
+Podem ser usadas após a criação de um primeiro segmento de asa com RectangularSegment para 
+transformar o segmento mais externo da asa.
+
+Ver Taper, Sweep, Verticalize, Dihedral.
+"""
 abstract type AbstractWingTransform end
+
 export Taper
+"""
+Afilamento de segmento de asa.
+
+Deve manter o enflechamento do quarto de corda do segmento.
+
+Deve ser usado como uma AbstractWingTransform.
+"""
 struct Taper <: AbstractWingTransform
     tip_to_root_chord_ratio::Float64
 end
@@ -84,6 +130,13 @@ function (t::Taper)(ws::WingSegment)
 end
 
 export Sweep
+"""
+Enflechamento de segmento de asa.
+
+O ângulo deve ser especificado usando u"°" do Unitful.
+
+Deve ser usado como uma AbstractWingTransform.
+"""
 struct Sweep <: AbstractWingTransform
     #usar ° do unitful aqui
     c_4_angle::Number
@@ -98,6 +151,12 @@ function (s::Sweep)(ws::WingSegment)
     new_segment
 end
 
+export Verticalize
+"""
+Transforma um segmento em vertical.
+
+Deve ser usado como uma AbstractWingTransform.
+"""
 struct Verticalize <: AbstractWingTransform end
 
 #troca y e z
@@ -111,6 +170,14 @@ function (v::Verticalize)(ws::WingSegment)
 end
 
 #plot 3d?
+export Dihedral
+"""
+Aplica um diedro a um segmento de asa.
+
+O ângulo deve ser especificado usando u"°" do Unitful.
+
+Deve ser usado como uma AbstractWingTransform.
+"""
 struct Dihedral <: AbstractWingTransform
     angle::Number
 end
@@ -125,7 +192,11 @@ function (d::Dihedral)(ws::WingSegment)
     new_segment
 end
 
-#remover wing segment do código!?
+"""
+Sequência de seções para representação de asa.
+
+As seções estão ordenadas da raiz para a ponta da asa.
+"""
 struct SectionConcatenation
     sections::Vector{WingSection}
 end
@@ -140,19 +211,24 @@ end
 
 tip_segment(sc::SectionConcatenation) = WingSegment(sc.sections[end-1], sc.sections[end])
 
-#fazer transformações lazy? permitiria verificar coerência das transformações
+
 function (awt::AbstractWingTransform)(sc::SectionConcatenation)
     SectionConcatenation([sc.sections[1:(end-2)]; sc |> tip_segment |> awt |> sections])
 end
 
+#colocar mudança de aerofólio opcional?
 export RectangularSegment
+"""
+Cria um segmento retangular de asa quando aplicado a um aerofólio.
+
+É o segundo passo na criação de uma asa.
+"""
 struct RectangularSegment
     span::Unitful.Length
     chord::Unitful.Length
     control::Union{Nothing, Control}
 end
 
-#retornar section concatenation
 function (rs::RectangularSegment)(a::Airfoil)
     SectionConcatenation([
         WingSection([0.0, 0.0, 0.0]*u"m", rs.chord, 0u"°", a.filename, claf(a), a.cd, a.cl, rs.control),
@@ -163,7 +239,11 @@ end
 struct KeepControl end
 
 export NextRectangularSegment
-#colocar mudança de aerofólio opcional
+"""
+Concatena mais um segmento retangular na ponta da asa quando aplicado a um SectionConcatenation.
+
+Pode ser usado após a criação de um primeiro segmento de asa com RectangularSegment.
+"""
 struct NextRectangularSegment <: AbstractWingTransform
     span::Unitful.Length
     #se refere ao segmento adicionado inteiro
@@ -198,6 +278,21 @@ function (ns::NextRectangularSegment)(sc::SectionConcatenation)
 end
 
 export WingConstructor
+"""
+Constrói uma asa quando aplicado a um SectionConcatenation.
+
+A distribuição de vórtices influencia a precisão dos resultados. Ver a 
+documentação do AVL para saber mais.
+
+Caso deseje-se criar uma versão espelhada da superfície criada, usar `is_symmetric = true`.
+Cuidado com superfícies verticais no plano de simetria, que não devem ser espelhadas!
+
+O número de componente deve ser especificado sequencialmente a partir de 1 para cada asa criada.
+Na prática, isso determina que as superfícies devem ser resolvidas independentemente pelo AVL.
+
+Assume-se que a geometria construída refere-se à asa direita,
+de forma que a posição da raiz deve ter y > 0 (ver referencial do AVL).
+"""
 struct WingConstructor
     name::String
     vortex_distribution::SVector{4, Int}
