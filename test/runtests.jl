@@ -1,8 +1,8 @@
 using avl_automation, Test, Unitful
 
 @test begin
-    control = avl_automation.AVLFile.Control("prof", 1.0, 0.75, avl_automation.AVLFile.Equal, avl_automation.AVLFile.Pitch)
-    avl_str = avl_automation.AVLFile.avl_string(control)
+    control = Control("prof", 1.0, 0.75, AVLFile.Equal, AVLFile.Pitch)
+    avl_str = AVLFile.avl_string(control)
     avl_str ==
 "CONTROL
 #nome, ganho, x_c dobradiça, dobradiça 0 0 0, sinal do duplicado
@@ -10,10 +10,10 @@ prof 1.0 0.75 0 0 0 1"
 end
 
 @test begin
-    control = avl_automation.AVLFile.Control("prof", 1.0, 0.75, avl_automation.AVLFile.Equal, avl_automation.AVLFile.Pitch)
-    sect = avl_automation.AVLFile.WingSection([0u"m", 0u"m", 0u"m"], 0.3u"m", 1u"°", 
+    control = Control("prof", 1.0, 0.75, AVLFile.Equal, AVLFile.Pitch)
+    sect = AVLFile.WingSection([0u"m", 0u"m", 0u"m"], 0.3u"m", 1u"°", 
         "naca0012_selig.dat", 1.09, [0.04703, 0.01201, 0.05415], [-1.0553, 0, 1.055], control)
-    avl_str = avl_automation.AVLFile.avl_string(sect)
+    avl_str = AVLFile.avl_string(sect)
     avl_str == 
 "#x, y, z do bordo de ataque, corda, incidência
 SECTION
@@ -28,15 +28,15 @@ CLAF
 CDCL
 -1.0553 0.04703 0.0 0.01201 1.055 0.05415
 #controle
-" * avl_automation.AVLFile.avl_string(control) * "\n"
+" * AVLFile.avl_string(control) * "\n"
 end
 
 @test begin
-    control = avl_automation.AVLFile.Control("prof", 1.0, 0.75, avl_automation.AVLFile.Equal, avl_automation.AVLFile.Pitch)
-    sect = avl_automation.AVLFile.WingSection([0u"m", 0u"m", 0u"m"], 0.3u"m", 1u"°", 
+    control = Control("prof", 1.0, 0.75, AVLFile.Equal, AVLFile.Pitch)
+    sect = AVLFile.WingSection([0u"m", 0u"m", 0u"m"], 0.3u"m", 1u"°", 
         "naca0012_selig.dat", 1.09, [0.04703, 0.01201, 0.05415], [-1.0553, 0, 1.055], control)
-    wing = avl_automation.AVLFile.Wing("main", [15, 1, 40, 1], true, 1.5u"°", 2, [1.0u"m", 0u"m", 0u"m"], [sect])
-    avl_str = avl_automation.AVLFile.avl_string(wing)
+    wing = AVLFile.Wing("main", [15, 1, 40, 1], true, 1.5u"°", 2, [1.0u"m", 0u"m", 0u"m"], [sect])
+    avl_str = AVLFile.avl_string(wing)
     avl_str ==
 "SURFACE
 main
@@ -54,20 +54,20 @@ COMPONENT
 #posição da raiz da asa
 TRANSLATE
 1.0 0.0 0.0
-" * avl_automation.AVLFile.avl_string(sect)
+" * AVLFile.avl_string(sect)
 end
 
 @test begin
-    control = avl_automation.AVLFile.Control("prof", 1.0, 0.75, avl_automation.AVLFile.Equal, avl_automation.AVLFile.Pitch)
+    control = Control("prof", 1.0, 0.75, AVLFile.Equal, AVLFile.Pitch)
     
-    sect = avl_automation.AVLFile.WingSection([0u"m", 0u"m", 0u"m"], 0.3u"m", 1u"°", 
+    sect = AVLFile.WingSection([0u"m", 0u"m", 0u"m"], 0.3u"m", 1u"°", 
         "naca0012_selig.dat", 1.09, [0.04703, 0.01201, 0.05415], [-1.0553, 0, 1.055], control)
     
-    wing = avl_automation.AVLFile.Wing("main", [15, 1, 40, 1], true, 1.5u"°", 2, [1.0u"m", 0u"m", 0u"m"], [sect])
+    wing = AVLFile.Wing("main", [15, 1, 40, 1], true, 1.5u"°", 2, [1.0u"m", 0u"m", 0u"m"], [sect])
     
-    plane = avl_automation.AVLFile.Plane("teste", 1u"m^2", 0.5u"m", 2u"m", 0.02, [wing])
+    plane = Plane("teste", 1u"m^2", 0.5u"m", 2u"m", 0.02, [wing])
 
-    avl_str = avl_automation.AVLFile.avl_string(plane)
+    avl_str = AVLFile.avl_string(plane)
     avl_str ==
 "teste
 #número de mach
@@ -80,33 +80,33 @@ end
 0 0 0
 #coef arrasto parasita
 0.02
-" * avl_automation.AVLFile.avl_string(wing)
+" * AVLFile.avl_string(wing)
 end
 
 @test begin
-    control = avl_automation.AVLFile.Control("prof", 1.0, 0.75, avl_automation.AVLFile.Equal, avl_automation.AVLFile.Pitch)
+    control = Control("prof", 1.0, 0.75, AVLFile.Equal, AVLFile.Pitch)
     
-    sect = avl_automation.AVLFile.WingSection([0u"m", 0u"m", 0u"m"], 0.3u"m", 1u"°", 
+    sect = AVLFile.WingSection([0u"m", 0u"m", 0u"m"], 0.3u"m", 1u"°", 
         "naca0012_selig.dat", 1.09, [0.04703, 0.01201, 0.05415], [-1.0553, 0, 1.055], control)
     
-    wing = avl_automation.AVLFile.Wing("main", [15, 1, 40, 1], true, 1.5u"°", 2, [1.0u"m", 0u"m", 0u"m"], [sect])
+    wing = AVLFile.Wing("main", [15, 1, 40, 1], true, 1.5u"°", 2, [1.0u"m", 0u"m", 0u"m"], [sect])
     
-    plane = avl_automation.AVLFile.Plane("teste", 1u"m^2", 0.5u"m", 2u"m", 0.02, [wing])
+    plane = Plane("teste", 1u"m^2", 0.5u"m", 2u"m", 0.02, [wing])
 
     contents = ""
     mktempdir(directory -> begin
         
-        path = avl_automation.AVLFile.write_avl_file(plane, directory)
+        path = AVLFile.write_avl_file(plane, directory)
         contents = read(path, String)
 
     end, pwd(), prefix="test_write_avl_file_")
 
-    (contents == avl_automation.AVLFile.avl_string(plane))
+    (contents == AVLFile.avl_string(plane))
 end
 
 @test begin
-    ec = avl_automation.AVLExecution.ExecutionCase(2.0u"°", Dict(2 => avl_automation.AVLFile.Pitch), "a", true, 1, "./")
-    avl_automation.AVLExecution.run_string(ec) ==
+    ec = AVLExecution.ExecutionCase(2.0u"°", Dict(2 => AVLFile.Pitch), "a", true, 1, "./")
+    AVLExecution.run_string(ec) ==
 "a
 a 2.0
 d2
@@ -120,15 +120,15 @@ st
 end
 
 @test begin
-    ec1 = avl_automation.AVLExecution.ExecutionCase(2.0u"°", Dict(2 => avl_automation.AVLFile.Pitch), "a", true, 1, "./")
-    ec2 = avl_automation.AVLExecution.ExecutionCase(4.0u"°", Dict(2 => avl_automation.AVLFile.Pitch), "a", true, 1, "./")
+    ec1 = AVLExecution.ExecutionCase(2.0u"°", Dict(2 => AVLFile.Pitch), "a", true, 1, "./")
+    ec2 = AVLExecution.ExecutionCase(4.0u"°", Dict(2 => AVLFile.Pitch), "a", true, 1, "./")
     
-    ecs = avl_automation.AVLExecution.ExecutionCaseSeries("armagedon", [ec1, ec2])
+    ecs = AVLExecution.ExecutionCaseSeries("armagedon", [ec1, ec2])
 
     contents = ""
     mktempdir(directory -> begin
         
-        path = avl_automation.AVLExecution.write_run_file(ecs, directory)
+        path = AVLExecution.write_run_file(ecs, directory)
         contents = read(path, String)
 
     end, pwd(), prefix="test_write_run_file_")
@@ -137,7 +137,7 @@ end
 "load
 armagedon
 oper
-" * avl_automation.AVLExecution.run_string(ec1) * avl_automation.AVLExecution.run_string(ec2) * "\nquit\n"
+" * AVLExecution.run_string(ec1) * AVLExecution.run_string(ec2) * "\nquit\n"
 end
 ###########################
 #tests that use the files in the test directory
@@ -145,7 +145,7 @@ end
     if !isdir(joinpath(@__DIR__, "tmp"))
         mkdir("tmp")
     end
-    avl_automation.AVLExecution.call_avl("test_plane.run", dirname(@__DIR__))
+    AVLExecution.call_avl("test_plane.run", dirname(@__DIR__))
     if isfile("tmp/test_plane1.fs") && isfile("tmp/test_plane1.st")
         rm("tmp/test_plane1.fs"); rm("tmp/test_plane1.st")
         true
@@ -158,19 +158,19 @@ end
 @test begin
     main_test_wing = Airfoil("naca0012_selig.dat", [-1.0553, 0, 1.055], [0.04703, 0.01201, 0.05415], @__DIR__) |>
        RectangularSegment(1.5u"m", 30u"cm", nothing) |>
-       NextRectangularSegment(0.5u"m", avl_automation.AVLFile.Control("aileron", 1.0, 0.75, avl_automation.AVLFile.Inverted, avl_automation.AVLFile.Roll)) |>
+       NextRectangularSegment(0.5u"m", Control("aileron", 1.0, 0.75, AVLFile.Inverted, AVLFile.Roll)) |>
        Taper(0.5) |>
        Sweep(20u"°") |>
        WingConstructor("main", [15, 1, 40, 1], true, 1, [0, 0, 0]u"m")
     
     hstab_test = Airfoil("naca0012_selig.dat", [-1.0553, 0, 1.055], [0.04703, 0.01201, 0.05415], @__DIR__) |>
-       RectangularSegment(0.4u"m", 17u"cm", avl_automation.AVLFile.Control("profundor", 1.0, 0.75, avl_automation.AVLFile.Equal, avl_automation.AVLFile.Pitch)) |>
+       RectangularSegment(0.4u"m", 17u"cm", Control("profundor", 1.0, 0.75, AVLFile.Equal, AVLFile.Pitch)) |>
        Taper(0.7) |>
        WingConstructor("hstab", [15, 1, 40, 1], true, 2, [60u"cm", 0u"m", 0u"m"])
 
-    test_plane = avl_automation.AVLFile.Plane("test_plane", 0.6u"m^2", 0.3u"m", 2u"m", 0.02, [main_test_wing, hstab_test])
+    test_plane = Plane("test_plane", 0.6u"m^2", 0.3u"m", 2u"m", 0.02, [main_test_wing, hstab_test])
     
-    st_file_res = avl_automation.AVLResults.STFileResults("test_plane1", test_plane.controls, @__DIR__)
+    st_file_res = AVLResults.STFileResults("test_plane1", test_plane.controls, @__DIR__)
 
     st_file_res.alpha ≈ -2u"°" &&
     st_file_res.CL ≈ -0.31970 &&
@@ -184,7 +184,7 @@ end
 end
 
 @test begin
-    fs_file_results = avl_automation.AVLResults.FSFileResults("test_plane1", @__DIR__)
+    fs_file_results = AVLResults.FSFileResults("test_plane1", @__DIR__)
 
     length(fs_file_results.wing_results) == 4 &&
     fs_file_results.wing_results[2].name == "main (YDUP)" &&
@@ -235,8 +235,8 @@ end
 
 
 @test begin
-    naca0012 = avl_automation.WingGeometry.Airfoil("naca0012_selig.dat", [-1.0553, 0, 1.055], [0.04703, 0.01201, 0.05415], @__DIR__)
-    avl_automation.WingGeometry.claf(naca0012) ≈ 1.09242618 &&
+    naca0012 = Airfoil("naca0012_selig.dat", [-1.0553, 0, 1.055], [0.04703, 0.01201, 0.05415], @__DIR__)
+    WingGeometry.claf(naca0012) ≈ 1.09242618 &&
     naca0012.x[50] ≈ 0.142201 &&
     naca0012.y[50] ≈ 0.052625
 end
@@ -245,12 +245,12 @@ end
 #wing geometry tests
 #melhorar esse teste
 @test begin
-    segment = avl_automation.WingGeometry.Airfoil(
+    segment = Airfoil(
             "naca0012_selig.dat", [-1.0553, 0, 1.055], 
             [0.04703, 0.01201, 0.05415], @__DIR__) |>
-        avl_automation.WingGeometry.RectangularSegment(2u"m", 0.3u"m", nothing) |>
-        avl_automation.WingGeometry.Taper(0.2) |>
-        avl_automation.WingGeometry.Sweep(15u"°")
+        RectangularSegment(2u"m", 0.3u"m", nothing) |>
+        Taper(0.2) |>
+        Sweep(15u"°")
     segment.sections[2].chord == 0.2 * segment.sections[1].chord &&
     segment.sections[2].leading_edge_relative_to_wing_root[1] >  segment.sections[1].leading_edge_relative_to_wing_root[1] &&
     segment.sections[2].leading_edge_relative_to_wing_root[2] >  segment.sections[1].leading_edge_relative_to_wing_root[2] &&
@@ -258,17 +258,17 @@ end
 end
 
 @test begin
-    segment = avl_automation.WingGeometry.Airfoil(
+    segment = Airfoil(
             "naca0012_selig.dat", [-1.0553, 0, 1.055], 
             [0.04703, 0.01201, 0.05415], @__DIR__) |>
-        avl_automation.WingGeometry.RectangularSegment(2u"m", 0.3u"m", nothing) |>
-        avl_automation.WingGeometry.Dihedral(3u"°")
+        RectangularSegment(2u"m", 0.3u"m", nothing) |>
+        Dihedral(3u"°")
     wing = segment |> 
-        avl_automation.WingGeometry.NextRectangularSegment(1u"m", avl_automation.AVLFile.Control("aileron", 1.0, 0.75, 
-                                        avl_automation.AVLFile.Inverted, avl_automation.AVLFile.Roll)) |> 
-        avl_automation.WingGeometry.Taper(0.5)
+        NextRectangularSegment(1u"m", Control("aileron", 1.0, 0.75, 
+                                        AVLFile.Inverted, AVLFile.Roll)) |> 
+        Taper(0.5)
 
     segment.sections[2].leading_edge_relative_to_wing_root[3] ≈ segment.sections[1].leading_edge_relative_to_wing_root[3] + 2u"m"*tan(3u"°") &&
     length(wing.sections) == 3 &&
-    avl_automation.WingGeometry.tip_segment(wing).tip.chord ≈ 0.15u"m"
+    WingGeometry.tip_segment(wing).tip.chord ≈ 0.15u"m"
 end

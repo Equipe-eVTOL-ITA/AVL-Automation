@@ -44,7 +44,6 @@ end
 using Plots
 Plots.plot(a::Airfoil; kwargs...) = Plots.plot(a.x, a.y; kwargs...)
 
-export WingSegment
 """
 Representação de segmento de asa através de uma seção raiz e uma seção de ponta.
 

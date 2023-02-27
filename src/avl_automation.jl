@@ -9,22 +9,27 @@ using Reexport
 module AVLFile
 include("avlfile.jl")
 end
-#deixar privado? - exportar nome, não nomes internos - e structs base? fazer prelúdio?
-@reexport using .AVLFile
+#colocar control e plane em módulo à parte?
+#são diferentes de WingSection, já que devem ser construídos diretamente pelo usuário
+export AVLFile
+@reexport using .AVLFile: Control, Plane
 
 "Entradas para execução do AVL, criação do arquivo .run e execução do AVL"
 module AVLExecution
 include("avlexecution.jl")
 end
+export AVLExecution
 
 "Leitura e representação de resultados obtidos do AVL"
 module AVLResults
 include("avlresults.jl")
 end
+export AVLResults
 ######### fim dos módulos internos
 
 #todo
 #make vortex_distribution option more fine grained (better represent control surfaces, taper changes, etc)
+#better plane constructor
 #plot control surfaces
 #display of objects
 #wing area, cma, etc calculation
@@ -56,12 +61,12 @@ ser usada na construção de um avião.
 module WingGeometry
 include("wing_geometry.jl")
 end
-
 @reexport using .WingGeometry
 
+"Wrapper para análise de aviões."
 module PlaneAnalysis
 include("plane_analysis.jl")
 end
-
 @reexport using .PlaneAnalysis
+
 end # module
