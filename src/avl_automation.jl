@@ -17,6 +17,7 @@ module AVLExecution
 include("avlexecution.jl")
 end
 
+"Leitura e representação de resultados obtidos do AVL"
 module AVLResults
 include("avlresults.jl")
 end
