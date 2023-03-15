@@ -18,7 +18,8 @@ export AVLFile
 module AVLExecution
 include("avlexecution.jl")
 end
-export AVLExecution
+using .AVLExecution: run_avl
+export AVLExecution, run_avl
 
 "Leitura e representação de resultados obtidos do AVL"
 module AVLResults
@@ -35,8 +36,8 @@ export AVLResults
 #wing area, cma, etc calculation
 #post-processing: stability, cruise/stall speed, wing FEM
 #cleanup exports and visibility
-#option to open avl in current directory
 #cancelar execução do avl?
+#documentar API?
 #formato de dados dos resultados de controle está ruim
 #indicar se resultados estão compensados ou não
 #ler Cm do st

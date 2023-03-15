@@ -108,11 +108,23 @@ export call_avl
 """
     call_avl(run_filename::String, avl_directory::String=dirname(@__DIR__))
 
-Executa o AVL.
+Executa o AVL com um arquivo de execução `.run`.
 
-Por padrão, usa o executável encontrado na raíz do projeto, acima do diretório `src/`.
+Por padrão, usa o executável encontrado na raíz da package, acima do diretório `src/`.
 """
 function call_avl(run_filename::String, avl_directory::String=dirname(@__DIR__))
     program = joinpath(avl_directory, "avl")
     run(pipeline(run_filename, `$program`))
+end
+
+"""
+    run_avl(avl_directory::String=dirname(@__DIR__))
+
+Executa o AVL interativamente.
+
+Por padrão, usa o executável encontrado na raíz da package, acima do diretório `src/`.
+"""
+function run_avl(avl_directory::String=dirname(@__DIR__))
+    program = joinpath(avl_directory, "avl")
+    run(`$program`)
 end
