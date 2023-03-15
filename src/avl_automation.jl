@@ -35,6 +35,11 @@ export AVLResults
 #wing area, cma, etc calculation
 #post-processing: stability, cruise/stall speed, wing FEM
 #cleanup exports and visibility
+#option to open avl in current directory
+#cancelar execução do avl?
+#formato de dados dos resultados de controle está ruim
+#indicar se resultados estão compensados ou não
+#ler Cm do st
 """
 Definição de geometria de asas.
 
