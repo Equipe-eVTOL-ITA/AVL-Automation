@@ -12,7 +12,7 @@ end
 #colocar control e plane em módulo à parte?
 #são diferentes de WingSection, já que devem ser construídos diretamente pelo usuário
 export AVLFile
-@reexport using .AVLFile: Control, Plane
+@reexport using .AVLFile
 
 "Entradas para execução do AVL, criação do arquivo .run e execução do AVL"
 module AVLExecution
@@ -29,7 +29,6 @@ export AVLResults
 ######### fim dos módulos internos
 
 #todo
-#make vortex_distribution option more fine grained (better represent control surfaces, taper changes, etc)
 #better plane constructor
 #plot control surfaces
 #display of objects
