@@ -1,4 +1,5 @@
-using Unitful, StaticArrays, ..AVLFile
+using Unitful, StaticArrays
+using ..AVLFile: WingSection, Wing, Control
 
 export Airfoil
 """Representação de aerofólio com as informações necessárias para plot e entrada no AVL.

@@ -1,4 +1,5 @@
-using Unitful, ..AVLFile
+using Unitful
+using ..AVLFile: Axes, Control, Pitch, Roll, Yaw
 
 """Resultados referentes a uma superfície de controle.
 
@@ -36,6 +37,7 @@ function ControlResults(name::String, axis::Axes, index::Int, words::Vector{<:Ab
     ControlResults(name, deflection, force_deriv, moment_deriv)
 end
 
+export STFileResults
 #todo: derivadas dinâmicas
 "Resultados obtidos de arquivo .st"
 struct STFileResults
@@ -103,6 +105,7 @@ function WingResult(surface_str::AbstractString)
     WingResult(String(name), y, cl)
 end
 
+export FSFileResults
 "Resultados obtidos de arquivo .fs"
 struct FSFileResults
     wing_results::Vector{WingResult}

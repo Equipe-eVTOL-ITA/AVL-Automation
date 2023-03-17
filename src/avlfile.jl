@@ -43,7 +43,7 @@ function avl_string(c::Control)::String
     join([c.name, string(c.gain), string(c.x_c_hinge), "0 0 0", string(Int(c.sgn_dup))], " ")
 end
 
-export WingSection
+#não deveria ser exportado para o usuário
 "Representação de uma seção de asa."
 struct WingSection 
     leading_edge_relative_to_wing_root::SVector{3, <:Unitful.Length}
@@ -85,7 +85,6 @@ function avl_string(ws::WingSection)::String
 end
 
 #cálculo de área, cma de asa, etc
-export Wing
 "Representação de superfície aerodinâmica."
 struct Wing
     name::String
@@ -123,7 +122,6 @@ function avl_string(w::Wing)::String
     ], "\n") * "\n" * prod(avl_string.(w.sections))
 end
 
-export Plane
 """
 Representação de avião completo.
 
@@ -172,8 +170,6 @@ function avl_string(p::Plane)::String
         string(p.parasitic_drag)
     ], "\n") * "\n" * prod(avl_string.(p.surfaces))
 end
-
-export write_avl_file
 
 """
     write_avl_file(p::Plane, directory::String)::String

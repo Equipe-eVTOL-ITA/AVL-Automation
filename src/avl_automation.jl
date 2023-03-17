@@ -1,32 +1,26 @@
 module avl_automation
 
 using Reexport
-@reexport using Unitful
-@reexport using Plots
 
-####### módulos internos
 "Descrição da geometria do avião e criação do arquivo .avl"
 module AVLFile
 include("avlfile.jl")
 end
 #colocar control e plane em módulo à parte?
 #são diferentes de WingSection, já que devem ser construídos diretamente pelo usuário
-export AVLFile
 @reexport using .AVLFile
 
 "Entradas para execução do AVL, criação do arquivo .run e execução do AVL"
 module AVLExecution
 include("avlexecution.jl")
 end
-using .AVLExecution: run_avl
-export AVLExecution, run_avl
+@reexport using .AVLExecution
 
 "Leitura e representação de resultados obtidos do AVL"
 module AVLResults
 include("avlresults.jl")
 end
-export AVLResults
-######### fim dos módulos internos
+@reexport using .AVLResults
 
 #todo
 #better plane constructor

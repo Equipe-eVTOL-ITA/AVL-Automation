@@ -1,4 +1,6 @@
-using ..AVLFile, ..AVLExecution, ..AVLResults, Unitful
+using ..AVLResults, Unitful
+using ..AVLFile: Plane, write_avl_file
+using ..AVLExecution: ExecutionCase, ExecutionCaseSeries, write_run_file, call_avl
 
 export analyze_plane
 """

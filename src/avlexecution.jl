@@ -1,8 +1,8 @@
-using Unitful, StaticArrays, ..AVLFile
+using Unitful, StaticArrays
+using ..AVLFile: Plane, Axes, Pitch, Roll, Yaw
 
 #guardar só um plane + bool timar ou não + case_number? todo processamento na run_string
 #assume beta = 0
-export ExecutionCase
 "Representação dos dados de entrada de um caso de execução do AVL, com ângulo de ataque fixo.
 
 Pode ser compensado ou não."
@@ -58,7 +58,6 @@ function run_string(ec::ExecutionCase)
 end
 
 #melhorar nome
-export ExecutionCaseSeries
 """Representação de série de casos de execução.
 
 No AVL, é mais eficiente rodar muitos casos em uma sessão do que rodar várias seções com 
@@ -90,7 +89,6 @@ function run_string(ecs::ExecutionCaseSeries)
     ], "\n")*"\n"
 end
 
-export write_run_file
 """
     write_run_file(ecs::ExecutionCaseSeries, directory::String)::String
 
@@ -117,6 +115,7 @@ function call_avl(run_filename::String, avl_directory::String=dirname(@__DIR__))
     run(pipeline(run_filename, `$program`))
 end
 
+export run_avl
 """
     run_avl(avl_directory::String=dirname(@__DIR__))
 
