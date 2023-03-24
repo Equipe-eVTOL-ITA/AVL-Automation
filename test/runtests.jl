@@ -173,6 +173,7 @@ end
     st_file_res = AVLResults.STFileResults("test_plane1", test_plane.controls, @__DIR__)
 
     st_file_res.alpha ≈ -2u"°" &&
+    st_file_res.CM ≈ 0 &&
     st_file_res.CL ≈ -0.31970 &&
     st_file_res.CD ≈ 0.04930 &&
     st_file_res.CLa ≈ 11.383851 &&

@@ -42,6 +42,7 @@ export STFileResults
 "Resultados obtidos de arquivo .st"
 struct STFileResults
     alpha::typeof(1.0u"°")
+    CM::Float64
     CL::Float64
     CD::Float64
     CLa::Float64
@@ -76,6 +77,7 @@ function STFileResults(filetitle::String, controls::Vector{Control}, directory::
     words = split(read(joinpath(directory, filetitle*".st"), String))
     STFileResults(
         get_float_from_key("Alpha", words)*u"°",
+        get_float_from_key("Cmtot", words),
         get_float_from_key("CLtot", words),
         get_float_from_key("CDtot", words),
         get_float_from_key("CLa", words),
@@ -133,6 +135,7 @@ Deve ser a união dos campos das structs `STFileResults` e `FSFileResults`
 struct CaseResults
     filetitle::String
     alpha::typeof(1.0u"°")
+    CM::Float64
     CL::Float64
     CD::Float64
     CLa::Float64
@@ -154,6 +157,7 @@ function CaseResults(filetitle::String, controls::Vector{Control}, directory::St
     fsdata = FSFileResults(filetitle, directory)
     CaseResults(filetitle,
         stdata.alpha,
+        stdata.CM,
         stdata.CL,
         stdata.CD,
         stdata.CLa,
