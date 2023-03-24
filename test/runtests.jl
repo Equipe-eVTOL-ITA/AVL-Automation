@@ -65,7 +65,7 @@ end
     
     wing = AVLFile.Wing("main", [15, 1, 40, 1], true, 1.5u"°", 2, [1.0u"m", 0u"m", 0u"m"], [sect])
     
-    plane = AVLFile.Plane("teste", 1u"m^2", 0.5u"m", 2u"m", 0.02, [wing])
+    plane = Plane("teste", 1u"m^2", 0.5u"m", 2u"m", 0.02, [wing])
 
     avl_str = AVLFile.avl_string(plane)
     avl_str ==
@@ -91,7 +91,7 @@ end
     
     wing = AVLFile.Wing("main", [15, 1, 40, 1], true, 1.5u"°", 2, [1.0u"m", 0u"m", 0u"m"], [sect])
     
-    plane = AVLFile.Plane("teste", 1u"m^2", 0.5u"m", 2u"m", 0.02, [wing])
+    plane = Plane("teste", 1u"m^2", 0.5u"m", 2u"m", 0.02, [wing])
 
     contents = ""
     mktempdir(directory -> begin
@@ -168,7 +168,7 @@ end
        Taper(0.7) |>
        WingConstructor("hstab", [15, 1, 40, 1], true, 2, [60u"cm", 0u"m", 0u"m"])
 
-    test_plane = AVLFile.Plane("test_plane", 0.6u"m^2", 0.3u"m", 2u"m", 0.02, [main_test_wing, hstab_test])
+    test_plane = Plane("test_plane", 0.6u"m^2", 0.3u"m", 2u"m", 0.02, [main_test_wing, hstab_test])
     
     st_file_res = AVLResults.STFileResults("test_plane1", test_plane.controls, @__DIR__)
 

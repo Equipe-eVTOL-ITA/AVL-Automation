@@ -122,6 +122,7 @@ function avl_string(w::Wing)::String
     ], "\n") * "\n" * prod(avl_string.(w.sections))
 end
 
+export Plane
 """
 Representação de avião completo.
 
