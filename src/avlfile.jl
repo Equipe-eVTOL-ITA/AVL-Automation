@@ -9,7 +9,12 @@ export Axes, Pitch, Roll, Yaw, Control, SgnDup, Equal, Inverted
 @enum SgnDup Equal Inverted
 
 export Control
-"Representação de superfície de controle"
+"""Representação de superfície de controle.
+
+É passado como argumento opcional para os construtores RectangularSegment
+e NextRectangularSegment (módulo WingGeometry) para especificar uma superfície
+de controle.
+"""
 struct Control
     name::String
     gain::Float64
@@ -127,6 +132,8 @@ export Plane
 Representação de avião completo.
 
 Assume M = 0 (escoamento incompressível), não há simetria aerodinâmica, CG na origem.
+
+Deve ser criado com as superfícies criadas com o módulo WingGeometry.
 """
 struct Plane
     name::String

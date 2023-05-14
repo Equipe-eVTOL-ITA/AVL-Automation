@@ -8,6 +8,8 @@ Os vetores `cl`, `cd` devem conter 3 elementos cada, com o coeficiente próximo 
 de estol negativo, próximo da região de Cd mínimo, e próximo da região de estol positivo.
 
 A importação de um aerofólio é o primeiro passo na criação de uma asa.
+
+Pode ser plotado com plot(airfoil, aspect_ratio=:equal)
 """
 struct Airfoil
     x::Vector{Float64}
@@ -279,10 +281,10 @@ end
 
 export WingConstructor
 """
-Constrói uma asa quando aplicado a um SectionConcatenation.
+Constrói uma asa quando aplicado a um SectionConcatenation (obtido da descrição da geometria da asa).
 
 A distribuição de vórtices influencia a precisão dos resultados. Ver a 
-documentação do AVL para saber mais.
+documentação do AVL para saber mais. Geralmente [40 1 15 1] é suficiente.
 
 Caso deseje-se criar uma versão espelhada da superfície criada, usar `is_symmetric = true`.
 Cuidado com superfícies verticais no plano de simetria, que não devem ser espelhadas!

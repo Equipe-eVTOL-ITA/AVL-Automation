@@ -1,3 +1,28 @@
+"""Package de automação do Athena Vortex Lattice, solver de forças aerodinâmicas para projeto aeronáutico.
+
+Para usar essa package corretamente, é necessário adicionar também as packages Unitful e Plots:
+``
+]add Unitful Plots``
+
+Analogamente, é sempre necessário usar as 3 packages para ter acesso à funcionalidade completa:
+``
+using avl_automation, Unitful, Plots
+``
+
+O fluxo de trabalho usual é:
+1) Criação de geometria de asas (ver módulo `WingGeometry`)
+2) Criação de um `Plane` com as superfícies criadas no módulo anterior (ver struct `Plane`)
+3) Análise com a função `analyze_plane` ou sessão interativa do AVL aberta com a função `run_avl()`
+4) Uso (eventual armazenamento) dos dados obtidos para pós processamento (TODO!)
+
+Se em algum momento você tiver dúvidas do que fazer a seguir, algumas sugestões de navegação:
+* Se estiver em dúvida sobre o que uma função/struct `X` faz e como usar, use (na REPL) os comandos `?X`
+ou digite `X(<TAB>`, o que vai te mostrar os nomes e tipos dos argumentos da função/construtor.
+* Se estiver realmente perdido, ou quiser conhecer mais a package, tente o comando `names(avl_automation)`.
+Ele vai mostrar todos os tipos, módulos e funções exportados pela package. A menos que você esteja usando
+um fluxo de trabalho meio estranho/específico, tudo que você vai precisar usar vai estar contido nessa lista
+de nomes. Caso você precise de uma função não exportada, basta usar `módulo.nome`.
+"""
 module avl_automation
 
 using Reexport
@@ -55,7 +80,7 @@ desejada. A qualquer momento, a geometria atual pode ser exibida com plot(wing, 
 indica uma sequência de qualquer tamanho dos itens listados dentro dos colchetes.
 
 Por fim, a lista de seções de asa (struct SectionConcatenation) é passada para um WingConstructor, que retornará uma struct Wing que pode
-ser usada na construção de um avião.
+ser usada na construção de um avião (struct Plane do módulo AVLFile).
 """
 module WingGeometry
 include("wing_geometry.jl")
