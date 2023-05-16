@@ -163,10 +163,11 @@ struct Verticalize <: AbstractWingTransform end
 
 #troca y e z
 function (v::Verticalize)(ws::WingSegment)
+
     new_segment = @set ws.tip.leading_edge_relative_to_wing_root = [
         ws.tip.leading_edge_relative_to_wing_root[1]
-        ws.tip.leading_edge_relative_to_wing_root[3]
-        ws.tip.leading_edge_relative_to_wing_root[2]
+        ws.root.leading_edge_relative_to_wing_root[2]
+        ws.tip.leading_edge_relative_to_wing_root[3] + span(ws)
     ]
     new_segment
 end

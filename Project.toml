@@ -1,7 +1,7 @@
 name = "avl_automation"
 uuid = "9f046b77-dc30-407b-b41c-96c42f6e1c60"
 authors = ["pekpuglia <pepuglia@gmail.com>"]
-version = "2.1.0"
+version = "2.1.1"
 
 [deps]
 MAT = "23992714-dd62-5051-b70f-ba57cb901cac"
