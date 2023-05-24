@@ -53,7 +53,8 @@ end
 #display of objects
 #wing area, cma, etc calculation
 #post-processing: stability, cruise/stall speed, wing FEM
-#cleanup exports and visibility
+#remover claf
+#remover número de componente
 #cancelar execução do avl?
 #documentar API?
 #formato de dados dos resultados de controle está ruim
