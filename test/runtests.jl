@@ -161,12 +161,12 @@ end
        NextRectangularSegment(0.5u"m", Control("aileron", 1.0, 0.75, Inverted, Roll)) |>
        Taper(0.5) |>
        Sweep(20u"°") |>
-       WingConstructor("main", [15, 1, 40, 1], true, 1, [0, 0, 0]u"m")
+       WingConstructor("main", [15, 1, 40, 1], true, [0, 0, 0]u"m")
     
     hstab_test = Airfoil("naca0012_selig.dat", [-1.0553, 0, 1.055], [0.04703, 0.01201, 0.05415], @__DIR__) |>
        RectangularSegment(0.4u"m", 17u"cm", Control("profundor", 1.0, 0.75, Equal, Pitch)) |>
        Taper(0.7) |>
-       WingConstructor("hstab", [15, 1, 40, 1], true, 2, [60u"cm", 0u"m", 0u"m"])
+       WingConstructor("hstab", [15, 1, 40, 1], true, [60u"cm", 0u"m", 0u"m"])
 
     test_plane = Plane("test_plane", 0.6u"m^2", 0.3u"m", 2u"m", 0.02, [main_test_wing, hstab_test])
     

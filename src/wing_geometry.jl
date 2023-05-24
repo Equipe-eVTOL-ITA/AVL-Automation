@@ -119,7 +119,7 @@ struct Taper <: AbstractWingTransform
 end
 
 using Setfield
-
+#documentar essas chamadas???
 function (t::Taper)(ws::WingSegment)
     tip_chord = t.tip_to_root_chord_ratio * ws.root.chord
     tip_leading_edge_x = ws.tip.leading_edge_relative_to_wing_root[1] + 
@@ -282,6 +282,11 @@ end
 
 export WingConstructor
 """
+    WingConstructor(name::AbstractString, 
+            vortex_distribution::SVector{4, Int},
+            is_symmetric::Bool,
+            root_position::SVector{3, Unitful.Length},
+            component::Int = 1)
 Constrói uma asa quando aplicado a um SectionConcatenation (obtido da descrição da geometria da asa).
 
 A distribuição de vórtices influencia a precisão dos resultados. Ver a 
@@ -290,8 +295,9 @@ documentação do AVL para saber mais. Geralmente [40 1 15 1] é suficiente.
 Caso deseje-se criar uma versão espelhada da superfície criada, usar `is_symmetric = true`.
 Cuidado com superfícies verticais no plano de simetria, que não devem ser espelhadas!
 
-O número de componente deve ser especificado sequencialmente a partir de 1 para cada asa criada.
-Na prática, isso determina que as superfícies devem ser resolvidas independentemente pelo AVL.
+O número de componente é mantido em 1 por padrão, de modo que o AVL encontra  a influência de todas
+as superfícies sobre todas as outras. Para desativar isso numere as superfícies sequencialmente, mas
+usar o mesmo número de componente para todas as superfícies gera resultados mais precisos.
 
 Assume-se que a geometria construída refere-se à asa direita,
 de forma que a posição da raiz deve ter y > 0 (ver referencial do AVL).
@@ -300,8 +306,15 @@ struct WingConstructor
     name::String
     vortex_distribution::SVector{4, Int}
     is_symmetric::Bool
-    component::Int
     root_position::SVector{3, Unitful.Length}
+    component::Int
+    function WingConstructor(name::AbstractString, 
+        vortex_distribution::AbstractVector,
+        is_symmetric::Bool,
+        root_position::Vector{<:Unitful.Length},
+        component::Int = 1)
+            new(name, vortex_distribution, is_symmetric, root_position, component)
+    end
 end
 
 function (wc::WingConstructor)(sc::SectionConcatenation)
