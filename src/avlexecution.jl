@@ -112,7 +112,7 @@ Por padrão, usa o executável encontrado na raíz da package, acima do diretór
 """
 function call_avl(run_filename::String, avl_directory::String=dirname(@__DIR__))
     program = joinpath(avl_directory, "avl")
-    run(pipeline(run_filename, `$program`))
+    run(pipeline(run_filename, `$program`, devnull))
 end
 
 export run_avl
