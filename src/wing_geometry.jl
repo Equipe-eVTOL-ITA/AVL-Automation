@@ -147,7 +147,7 @@ end
 function (s::Sweep)(ws::WingSegment)
     tip_leading_edge_x = ws.root.leading_edge_relative_to_wing_root[1] +
         ws.root.chord/4 + 
-        sin(s.c_4_angle) * span(ws) - ws.tip.chord/4
+        tan(s.c_4_angle) * span(ws) - ws.tip.chord/4
     new_segment = @set ws.tip.leading_edge_relative_to_wing_root = [tip_leading_edge_x;
                         ws.tip.leading_edge_relative_to_wing_root[2:3]]
     new_segment
