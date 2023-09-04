@@ -2,7 +2,7 @@ using avl_automation, Test, Unitful
 
 include("avlfile_test.jl")
 include("avlexecution_test.jl")
-
+include("wing_geometry_test.jl")
 @test begin
     main_test_wing = Airfoil("naca0012_selig.dat", [-1.0553, 0, 1.055], [0.04703, 0.01201, 0.05415], @__DIR__) |>
        RectangularSegment(1.5u"m", 30u"cm", nothing) |>
@@ -83,28 +83,28 @@ end
 end
 
 
-@test begin
-    naca0012 = Airfoil("naca0012_selig.dat", [-1.0553, 0, 1.055], [0.04703, 0.01201, 0.05415], @__DIR__)
-    WingGeometry.claf(naca0012) ≈ 1.09242618 &&
-    naca0012.x[50] ≈ 0.142201 &&
-    naca0012.y[50] ≈ 0.052625
-end
+# @test begin
+#     naca0012 = Airfoil("naca0012_selig.dat", [-1.0553, 0, 1.055], [0.04703, 0.01201, 0.05415], @__DIR__)
+#     WingGeometry.claf(naca0012) ≈ 1.09242618 &&
+#     naca0012.x[50] ≈ 0.142201 &&
+#     naca0012.y[50] ≈ 0.052625
+# end
 
 #############################
 #wing geometry tests
 #melhorar esse teste
-@test begin
-    segment = Airfoil(
-            "naca0012_selig.dat", [-1.0553, 0, 1.055], 
-            [0.04703, 0.01201, 0.05415], @__DIR__) |>
-        RectangularSegment(2u"m", 0.3u"m", nothing) |>
-        Taper(0.2) |>
-        Sweep(15u"°")
-    segment.sections[2].chord == 0.2 * segment.sections[1].chord &&
-    segment.sections[2].leading_edge_relative_to_wing_root[1] >  segment.sections[1].leading_edge_relative_to_wing_root[1] &&
-    segment.sections[2].leading_edge_relative_to_wing_root[2] >  segment.sections[1].leading_edge_relative_to_wing_root[2] &&
-    segment.sections[2].leading_edge_relative_to_wing_root[3] == segment.sections[1].leading_edge_relative_to_wing_root[3]
-end
+# @test begin
+#     segment = Airfoil(
+#             "naca0012_selig.dat", [-1.0553, 0, 1.055], 
+#             [0.04703, 0.01201, 0.05415], @__DIR__) |>
+#         RectangularSegment(2u"m", 0.3u"m", nothing) |>
+#         Taper(0.2) |>
+#         Sweep(15u"°")
+#     segment.sections[2].chord == 0.2 * segment.sections[1].chord &&
+#     segment.sections[2].leading_edge_relative_to_wing_root[1] >  segment.sections[1].leading_edge_relative_to_wing_root[1] &&
+#     segment.sections[2].leading_edge_relative_to_wing_root[2] >  segment.sections[1].leading_edge_relative_to_wing_root[2] &&
+#     segment.sections[2].leading_edge_relative_to_wing_root[3] == segment.sections[1].leading_edge_relative_to_wing_root[3]
+# end
 
 @test begin
     segment = Airfoil(
