@@ -290,7 +290,7 @@ export WingConstructor
 Constrói uma asa quando aplicado a um SectionConcatenation (obtido da descrição da geometria da asa).
 
 A distribuição de vórtices influencia a precisão dos resultados. Ver a 
-documentação do AVL para saber mais. Geralmente [40 1 15 1] é suficiente.
+documentação do AVL para saber mais. Geralmente [40, 1, 15, 1] é suficiente.
 
 Caso deseje-se criar uma versão espelhada da superfície criada, usar `is_symmetric = true`.
 Cuidado com superfícies verticais no plano de simetria, que não devem ser espelhadas!
