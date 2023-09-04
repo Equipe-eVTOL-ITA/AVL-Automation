@@ -16,6 +16,7 @@ O fluxo de trabalho usual é:
 4) Uso (eventual armazenamento) dos dados obtidos para pós processamento (TODO!)
 
 Se em algum momento você tiver dúvidas do que fazer a seguir, algumas sugestões de navegação:
+* Use a função `doc_avl` para abrir a documentação do AVL, caso necessário.
 * Se estiver em dúvida sobre o que uma função/struct `X` faz e como usar, use (na REPL) os comandos `?X`
 ou digite `X(<TAB>`, o que vai te mostrar os nomes e tipos dos argumentos da função/construtor.
 * Se estiver realmente perdido, ou quiser conhecer mais a package, tente o comando `names(avl_automation)`.

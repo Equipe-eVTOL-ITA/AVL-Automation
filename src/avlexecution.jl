@@ -127,3 +127,17 @@ function run_avl(avl_directory::String=dirname(@__DIR__))
     program = joinpath(avl_directory, "avl")
     run(`$program`)
 end
+
+using DefaultApplication
+
+export doc_avl
+"""
+    doc_avl(avl_doc_directory::String=dirname(@__DIR__))
+
+Abre a documentação do AVL no leitor de pdf padrão.
+
+Por padrão, usa o pdf encontrado na raíz da package.
+"""
+function doc_avl(avl_doc_directory::String=dirname(@__DIR__))
+    DefaultApplication.open(joinpath(avl_doc_directory, "AVL_User_Primer.pdf"))
+end
