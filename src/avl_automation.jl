@@ -51,17 +51,14 @@ end
 #todo
 #better plane constructor
 #aerofólio placa plana
-#mudar de aerofólio ao longo da asa?
 #plot control surfaces
 #display of objects
 #wing area, cma, etc calculation
 #post-processing: stability, cruise/stall speed, wing FEM
-#remover claf!!!!
 #cancelar execução do avl?
 #documentar API?
 #formato de dados dos resultados de controle está ruim
 #indicar se resultados estão compensados ou não
-#ler Cm do st
 """
 Definição de geometria de asas.
 
