@@ -28,8 +28,16 @@ end
 
 filepath(a::Airfoil) = joinpath(a.directory, a.filename)
 
-using Plots
-Plots.plot(a::Airfoil; kwargs...) = Plots.plot(a.x, a.y; kwargs...)
+# using Plots
+# Plots.plot(a::Airfoil; kwargs...) = Plots.plot(a.x, a.y; kwargs...)
+
+using RecipesBase
+
+@recipe function f(a::Airfoil)
+    aspect_ratio --> :equal
+    label --> ""
+    a.x, a.y
+end
 
 """
 Representação de segmento de asa através de uma seção raiz e uma seção de ponta.
@@ -46,33 +54,6 @@ span(ws::WingSegment) = ws.tip.leading_edge_relative_to_wing_root[2] -
                         ws.root.leading_edge_relative_to_wing_root[2]
 
 sections(ws::WingSegment) = [ws.root, ws.tip]
-
-#assumindo incidência 0
-x_vertexes(ws::WingSegment) = [
-    ws.root.leading_edge_relative_to_wing_root[1]
-    ws.tip.leading_edge_relative_to_wing_root[1]
-    ws.tip.leading_edge_relative_to_wing_root[1] + ws.tip.chord
-    ws.root.leading_edge_relative_to_wing_root[1] + ws.root.chord
-]
-
-y_vertexes(ws::WingSegment) = [
-    ws.root.leading_edge_relative_to_wing_root[2]
-    ws.tip.leading_edge_relative_to_wing_root[2]
-    ws.tip.leading_edge_relative_to_wing_root[2]
-    ws.root.leading_edge_relative_to_wing_root[2]
-]
-
-z_vertexes(ws::WingSegment) = [
-    ws.root.leading_edge_relative_to_wing_root[3]
-    ws.tip.leading_edge_relative_to_wing_root[3]
-    ws.tip.leading_edge_relative_to_wing_root[3]
-    ws.root.leading_edge_relative_to_wing_root[3]    
-]
-
-#plota no plano (ignora diedro)
-function Plots.plot(ws::WingSegment; kwargs...)
-    Plots.plot(x_vertexes(ws), y_vertexes(ws); kwargs...)
-end
 
 export AbstractWingTransform
 """
@@ -188,12 +169,55 @@ struct SectionConcatenation
     sections::Vector{WingSection}
 end
 
-function Plots.plot(sc::SectionConcatenation; kwargs...)
-    xs = [[sect.leading_edge_relative_to_wing_root[1] for sect in sc.sections]; 
-        [sect.leading_edge_relative_to_wing_root[1] + sect.chord for sect in reverse(sc.sections)]]
-    ys = [sect.leading_edge_relative_to_wing_root[2] for sect in cat(sc.sections, reverse(sc.sections), dims=1)]
-    p = Plots.plot(xs, ys;kwargs...)
-    p
+@recipe function f(sc::SectionConcatenation, top_view::Bool=true)
+    if top_view
+        label --> ""
+        aspect_ratio --> :equal
+        xs = [
+            getindex.(getproperty.(sc.sections, :leading_edge_relative_to_wing_root), 1)
+            (getindex.(getproperty.(sc.sections, :leading_edge_relative_to_wing_root), 1) + getproperty.(sc.sections, :chord)) |> reverse
+        ]
+        ys = [
+            getindex.(getproperty.(sc.sections, :leading_edge_relative_to_wing_root), 2)
+            (getindex.(getproperty.(sc.sections, :leading_edge_relative_to_wing_root), 2)) |> reverse
+        ]
+
+        for (inner_sec, outer_sec) in zip(sc.sections[1:(end-1)], sc.sections[2:end])
+            if inner_sec.control == outer_sec.control && !isnothing(inner_sec.control)
+                @series begin
+                    label := inner_sec.control.name
+                    control_xs = [
+                        #só funciona p x_c_hinge > 0!
+                        inner_sec.leading_edge_relative_to_wing_root[1] + inner_sec.control.x_c_hinge * inner_sec.chord
+                        outer_sec.leading_edge_relative_to_wing_root[1] + inner_sec.control.x_c_hinge * outer_sec.chord
+                        outer_sec.leading_edge_relative_to_wing_root[1] + outer_sec.chord
+                        inner_sec.leading_edge_relative_to_wing_root[1] + inner_sec.chord
+                    ]
+                    control_ys = [
+                        inner_sec.leading_edge_relative_to_wing_root[2]
+                        outer_sec.leading_edge_relative_to_wing_root[2]
+                        outer_sec.leading_edge_relative_to_wing_root[2]
+                        inner_sec.leading_edge_relative_to_wing_root[2]
+                    ]
+                    control_xs, control_ys
+                end
+            end
+        end
+
+    else
+        label --> ""
+        aspect_ratio --> :equal
+        #eixo x: coordenadas y
+        #eixo y: coordenadas z
+        #assume incidência = 0
+        xs = [
+            getindex.(getproperty.(sc.sections, :leading_edge_relative_to_wing_root), 2)
+        ]
+        ys = [
+            getindex.(getproperty.(sc.sections, :leading_edge_relative_to_wing_root), 3)
+        ]
+    end
+    xs, ys
 end
 
 tip_segment(sc::SectionConcatenation) = WingSegment(sc.sections[end-1], sc.sections[end])
