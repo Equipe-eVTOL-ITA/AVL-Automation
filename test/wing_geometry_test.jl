@@ -70,8 +70,19 @@ function test_next_rectangular_segment()
         RectangularSegment(2u"m", 0.3u"m", nothing) |>
         NextRectangularSegment(1u"m", nothing)
 
+    copied_airfoil_segment = Airfoil(
+        "naca0012_selig.dat", [-1.0553, 0, 1.055], 
+        [0.04703, 0.01201, 0.05415], @__DIR__) |>
+        RectangularSegment(2u"m", 0.3u"m", nothing) |>
+        NextRectangularSegment(1u"m", nothing, Airfoil(
+            "naca0012_selig copy.dat", [-1.0553, 0, 1.055], 
+            [0.04703, 0.01201, 0.05415], @__DIR__))
+
+
     length(segment.sections) == 3 &&
-    segment.sections[end].leading_edge_relative_to_wing_root[2] == 3u"m"
+    segment.sections[end].leading_edge_relative_to_wing_root[2] == 3u"m" &&
+    segment.sections[end].airfoil_data == "naca0012_selig.dat" &&
+    copied_airfoil_segment.sections[end].airfoil_data == "naca0012_selig copy.dat"
 end
 
 #fazer teste misto? taper + sweep + Verticalize

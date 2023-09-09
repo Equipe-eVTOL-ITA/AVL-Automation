@@ -221,7 +221,8 @@ function (rs::RectangularSegment)(a::Airfoil)
     ])
 end
 
-struct KeepControl end
+export Inherit
+struct Inherit end
 
 export NextRectangularSegment
 """
@@ -231,32 +232,47 @@ Pode ser usado após a criação de um primeiro segmento de asa com RectangularS
 """
 struct NextRectangularSegment <: AbstractWingTransform
     span::Unitful.Length
-    #se refere ao segmento adicionado inteiro
-    control::Union{Nothing, Control, KeepControl}
+    control::Union{Nothing, Control, Inherit}
+    airfoil::Union{Airfoil, Inherit}
+    function NextRectangularSegment(span, control, airfoil)
+        new(span, control, airfoil)
+    end
+    function NextRectangularSegment(span, control)
+        new(span, control, Inherit())
+    end
 end
 
 function (ns::NextRectangularSegment)(sc::SectionConcatenation)
-    new_section_control = if ns.control === KeepControl()
-        sc.sections[end].control
+    tip = sc.sections[end]
+
+    new_section_control = if ns.control === Inherit()
+        tip.control
     elseif  ns.control isa Control
         #ws.tip teria 2 controles
         #ainda não há suporte para 2 controles/seção
-        if !isnothing(sc.sections[end].control)
+        if !isnothing(tip.control)
             error("tip of segment $(tip_segment(sc)) would have 2 controls, which isn't supported yet")
         else
             sc = @set sc.sections[end].control = ns.control
             ns.control
         end
     end
-    tip = sc.sections[end]
+
+    new_section_airfoil_data, new_section_cd, new_section_cl = 
+    if ns.airfoil == Inherit()
+        tip.airfoil_data, tip.cd, tip.cl
+    else
+        ns.airfoil.filename, ns.airfoil.cd, ns.airfoil.cl
+    end
+
     SectionConcatenation([
         sc.sections...,
         WingSection(tip.leading_edge_relative_to_wing_root+[0.0u"m", ns.span, 0.0u"m"],
             tip.chord,
             0.0u"°",
-            tip.airfoil_data,
-            tip.cd,
-            tip.cl,
+            new_section_airfoil_data,
+            new_section_cd,
+            new_section_cl,
             new_section_control)
     ])
 end
