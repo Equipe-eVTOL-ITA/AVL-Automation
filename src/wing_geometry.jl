@@ -26,24 +26,6 @@ struct Airfoil
     end
 end
 
-max_diff(vec) = maximum(vec) - minimum(vec)
-
-"""
-    claf(a::Airfoil)
-
-Retorna um coeficiente de correção de Cla para o aerofólio fornecido.
-
-Aplica a fórmula ``1 + 0.77 * tₘₐₓ``, onde ``tₘₐₓ`` representa a espessura
-máxima do aerofólio (página 16 do User Primer)
-"""
-function claf(a::Airfoil)
-    unique_x = unique(a.x)
-
-    tmax = maximum(max_diff(a.y[findall(el -> el ≈ x, a.x)]) for x in unique_x)
-
-    1 + 0.77 * tmax
-end
-
 using Plots
 Plots.plot(a::Airfoil; kwargs...) = Plots.plot(a.x, a.y; kwargs...)
 
@@ -234,8 +216,8 @@ end
 
 function (rs::RectangularSegment)(a::Airfoil)
     SectionConcatenation([
-        WingSection([0.0, 0.0, 0.0]*u"m", rs.chord, 0u"°", a.filename, claf(a), a.cd, a.cl, rs.control),
-        WingSection([0.0u"m", rs.span, 0.0u"m"], rs.chord, 0u"°", a.filename, claf(a), a.cd, a.cl, rs.control)
+        WingSection([0.0, 0.0, 0.0]*u"m", rs.chord, 0u"°", a.filename, a.cd, a.cl, rs.control),
+        WingSection([0.0u"m", rs.span, 0.0u"m"], rs.chord, 0u"°", a.filename, a.cd, a.cl, rs.control)
     ])
 end
 
@@ -273,7 +255,6 @@ function (ns::NextRectangularSegment)(sc::SectionConcatenation)
             tip.chord,
             0.0u"°",
             tip.airfoil_data,
-            tip.claf,
             tip.cd,
             tip.cl,
             new_section_control)

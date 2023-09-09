@@ -55,7 +55,6 @@ struct WingSection
     chord::Unitful.Length
     incidence::typeof(1.0u"°")
     airfoil_data::String
-    claf::Float64
     cd::SVector{3, Float64}
     cl::SVector{3, Float64}
     control::Union{Nothing, Control}
@@ -78,9 +77,6 @@ function avl_string(ws::WingSection)::String
         "#arquivo do aerofólio",
         "AFILE",
         ws.airfoil_data,
-        "#correção de aerofólio espesso (p 16)",
-        "CLAF",
-        string(ws.claf),
         "#CL1 CD1 CL2 CD2 CL3 CD3 para o aerofólio",
         "CDCL",
         join(Iterators.flatten(zip(ws.cl, ws.cd)), " "),
