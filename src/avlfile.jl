@@ -54,7 +54,7 @@ struct WingSection
     leading_edge_relative_to_wing_root::SVector{3, <:Unitful.Length}
     chord::Unitful.Length
     incidence::typeof(1.0u"°")
-    airfoil_data::String
+    airfoil_file_path::String
     cd::SVector{3, Float64}
     cl::SVector{3, Float64}
     control::Union{Nothing, Control}
@@ -76,7 +76,7 @@ function avl_string(ws::WingSection)::String
             " " * string(ustrip(Float64, u"°", ws.incidence)),
         "#arquivo do aerofólio",
         "AFILE",
-        ws.airfoil_data,
+        ws.airfoil_file_path,
         "#CL1 CD1 CL2 CD2 CL3 CD3 para o aerofólio",
         "CDCL",
         join(Iterators.flatten(zip(ws.cl, ws.cd)), " "),

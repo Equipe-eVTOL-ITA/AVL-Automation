@@ -22,7 +22,7 @@ function test_rectangular_segment()
     all(segment.sections[1].leading_edge_relative_to_wing_root .≈ [0, 0, 0]u"m") &&
     all(segment.sections[2].leading_edge_relative_to_wing_root .≈ [0, 2, 0]u"m") &&
     segment.sections[1].chord == segment.sections[2].chord == 0.3u"m" &&
-    two_airfoil_segment.sections[1].airfoil_data != two_airfoil_segment.sections[2].airfoil_data
+    two_airfoil_segment.sections[1].airfoil_file_path != two_airfoil_segment.sections[2].airfoil_file_path
 end
 
 function test_taper()
@@ -89,8 +89,8 @@ function test_next_rectangular_segment()
 
     length(segment.sections) == 3 &&
     segment.sections[end].leading_edge_relative_to_wing_root[2] == 3u"m" &&
-    segment.sections[end].airfoil_data == "naca0012_selig.dat" &&
-    copied_airfoil_segment.sections[end].airfoil_data == "naca0012_selig copy.dat"
+    segment.sections[end].airfoil_file_path == joinpath(@__DIR__, "naca0012_selig.dat") &&
+    copied_airfoil_segment.sections[end].airfoil_file_path == joinpath(@__DIR__, "naca0012_selig copy.dat")
 end
 
 #fazer teste misto? taper + sweep + Verticalize

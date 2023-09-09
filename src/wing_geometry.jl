@@ -26,6 +26,8 @@ struct Airfoil
     end
 end
 
+filepath(a::Airfoil) = joinpath(a.directory, a.filename)
+
 using Plots
 Plots.plot(a::Airfoil; kwargs...) = Plots.plot(a.x, a.y; kwargs...)
 
@@ -232,8 +234,8 @@ end
 function (rs::RectangularSegment)(a::Airfoil)
     tip_airfoil = (rs.tip_airfoil == Inherit()) ? a : rs.tip_airfoil
     SectionConcatenation([
-        WingSection([0.0, 0.0, 0.0]*u"m", rs.chord, 0u"°", a.filename, a.cd, a.cl, rs.control),
-        WingSection([0.0u"m", rs.span, 0.0u"m"], rs.chord, 0u"°", tip_airfoil.filename, tip_airfoil.cd, tip_airfoil.cl, rs.control)
+        WingSection([0.0, 0.0, 0.0]*u"m", rs.chord, 0u"°", filepath(a), a.cd, a.cl, rs.control),
+        WingSection([0.0u"m", rs.span, 0.0u"m"], rs.chord, 0u"°", filepath(tip_airfoil), tip_airfoil.cd, tip_airfoil.cl, rs.control)
     ])
 end
 
@@ -284,9 +286,9 @@ function (ns::NextRectangularSegment)(sc::SectionConcatenation)
 
     new_section_airfoil_data, new_section_cd, new_section_cl = 
     if ns.airfoil == Inherit()
-        tip.airfoil_data, tip.cd, tip.cl
+        tip.airfoil_file_path, tip.cd, tip.cl
     else
-        ns.airfoil.filename, ns.airfoil.cd, ns.airfoil.cl
+        ns.airfoil |> filepath, ns.airfoil.cd, ns.airfoil.cl
     end
 
     SectionConcatenation([
