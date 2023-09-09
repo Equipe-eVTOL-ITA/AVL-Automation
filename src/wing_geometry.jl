@@ -368,6 +368,4 @@ function (wc::WingConstructor)(sc::SectionConcatenation)
     Wing(wc.name, wc.vortex_distribution, wc.is_symmetric, 0.0u"°", wc.component, wc.root_position, sc.sections)
 end
 
-function Plots.plot(w::Wing; kwargs...)
-    Plots.plot(SectionConcatenation(w.sections); kwargs...)
-end
+@recipe f(::Type{Wing}, wing::Wing) = wing.sections |> SectionConcatenation
