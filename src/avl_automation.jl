@@ -51,7 +51,6 @@ end
 #todo
 #better plane constructor
 #aerofólio placa plana
-#plot control surfaces
 #display of objects
 #wing area, cma, etc calculation
 #post-processing: stability, cruise/stall speed, wing FEM
