@@ -201,34 +201,58 @@ function (awt::AbstractWingTransform)(sc::SectionConcatenation)
     SectionConcatenation([sc.sections[1:(end-2)]; sc |> tip_segment |> awt |> sections])
 end
 
+export Inherit
+"""
+Struct marcadora de herança de aerofólios e controles de seções de asa.
+"""
+struct Inherit end
+
 #colocar mudança de aerofólio opcional?
 export RectangularSegment
 """
 Cria um segmento retangular de asa quando aplicado a um aerofólio.
 
 É o segundo passo na criação de uma asa.
+
+É possível passar um `tip_airfoil::Airfoil` para fazer uma asa com perfil variável.
 """
 struct RectangularSegment
     span::Unitful.Length
     chord::Unitful.Length
     control::Union{Nothing, Control}
+    tip_airfoil::Union{Inherit, Airfoil}
+    function RectangularSegment(span, chord, control, tip_airfoil)
+        new(span, chord, control, tip_airfoil)
+    end
+    function RectangularSegment(span::Unitful.Length, chord::Unitful.Length, control::Union{Nothing, Control})
+        new(span, chord, control, Inherit())
+    end
 end
 
 function (rs::RectangularSegment)(a::Airfoil)
+    tip_airfoil = (rs.tip_airfoil == Inherit()) ? a : rs.tip_airfoil
     SectionConcatenation([
         WingSection([0.0, 0.0, 0.0]*u"m", rs.chord, 0u"°", a.filename, a.cd, a.cl, rs.control),
-        WingSection([0.0u"m", rs.span, 0.0u"m"], rs.chord, 0u"°", a.filename, a.cd, a.cl, rs.control)
+        WingSection([0.0u"m", rs.span, 0.0u"m"], rs.chord, 0u"°", tip_airfoil.filename, tip_airfoil.cd, tip_airfoil.cl, rs.control)
     ])
 end
-
-export Inherit
-struct Inherit end
 
 export NextRectangularSegment
 """
 Concatena mais um segmento retangular na ponta da asa quando aplicado a um SectionConcatenation.
 
 Pode ser usado após a criação de um primeiro segmento de asa com RectangularSegment.
+
+
+    NextRectangularSegment(span, control, airfoil)
+
+Cria um novo segmento retangular com novo controle `Control` e novo aerofólio `Airfoil`.
+Também pode receber `Inherit()` nos 2 últimos parâmetros para manter o mesmo controle e o mesmo aerofólio.
+control também pode receber `nothing`.
+
+    NextRectangularSegment(span, control)
+
+Automaticamente repete o aerofólio anterior.
 """
 struct NextRectangularSegment <: AbstractWingTransform
     span::Unitful.Length

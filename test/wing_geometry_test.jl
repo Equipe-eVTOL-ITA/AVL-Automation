@@ -11,10 +11,18 @@ function test_rectangular_segment()
             [0.04703, 0.01201, 0.05415], @__DIR__) |>
         RectangularSegment(2u"m", 0.3u"m", nothing)
 
+    two_airfoil_segment = Airfoil(
+        "naca0012_selig.dat", [-1.0553, 0, 1.055], 
+        [0.04703, 0.01201, 0.05415], @__DIR__) |>
+        RectangularSegment(2u"m", 0.3u"m", nothing, Airfoil(
+            "naca0012_selig copy.dat", [-1.0553, 0, 1.055], 
+            [0.04703, 0.01201, 0.05415], @__DIR__))
+
     length(segment.sections) == 2 &&
     all(segment.sections[1].leading_edge_relative_to_wing_root .≈ [0, 0, 0]u"m") &&
     all(segment.sections[2].leading_edge_relative_to_wing_root .≈ [0, 2, 0]u"m") &&
-    segment.sections[1].chord == segment.sections[2].chord == 0.3u"m"
+    segment.sections[1].chord == segment.sections[2].chord == 0.3u"m" &&
+    two_airfoil_segment.sections[1].airfoil_data != two_airfoil_segment.sections[2].airfoil_data
 end
 
 function test_taper()
