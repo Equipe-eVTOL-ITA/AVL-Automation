@@ -49,6 +49,7 @@ struct STFileResults
     CLa::Float64
     Cma::Float64
     Xnp::Unitful.Length
+    e::Float64
     control_results::Vector{ControlResults}
 end
 
@@ -84,6 +85,7 @@ function STFileResults(filetitle::String, controls::Vector{Control}, directory::
         get_float_from_key("CLa", words),
         get_float_from_key("Cma", words),
         get_float_from_key("Xnp", words) * u"m",
+        get_float_from_key("e", words),
         [ControlResults(control.name, control.axis_to_trim, index, words) for (index, control) in enumerate(controls)]
     )
 end

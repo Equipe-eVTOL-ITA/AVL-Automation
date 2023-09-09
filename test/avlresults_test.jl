@@ -23,6 +23,7 @@ function test_st_file_results()
     st_file_res.CLa ≈ 11.383851 &&
     st_file_res.Cma ≈ -4.083255 &&
     st_file_res.Xnp ≈ 0.107607u"m" &&
+    st_file_res.e ≈ -0.6896 &&
     st_file_res.control_results[1].deflection ≈ -0.00000u"°" &&
     st_file_res.control_results[2].force_derivative ≈ 0.011736u"°^-1" &&
     st_file_res.control_results[2].moment_derivative ≈ -0.021467u"°^-1"
