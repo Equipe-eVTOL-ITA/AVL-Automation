@@ -144,6 +144,7 @@ struct CaseResults
     CLa::Float64
     Cma::Float64
     Xnp::Unitful.Length
+    e::Float64
     control_results::Vector{ControlResults}
     wing_results::Vector{WingResult}
 end
@@ -166,6 +167,7 @@ function CaseResults(filetitle::String, controls::Vector{Control}, directory::St
         stdata.CLa,
         stdata.Cma,
         stdata.Xnp,
+        stdata.e,
         stdata.control_results,
         fsdata.wing_results)
 end
