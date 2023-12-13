@@ -39,6 +39,15 @@ function camber_line_points(a::Airfoil)
     x, y
 end
 
+export camber_line_poly
+function camber_line_poly(a::Airfoil, order::Int)
+    x, y = camber_line_points(a)
+    b = y
+    A = x .^ (0:order)'
+    coefs = A \ b
+    x -> coefs' * x .^ (0:order)
+end
+
 using RecipesBase
 
 @recipe function f(a::Airfoil)
