@@ -4,6 +4,8 @@ using ..AVLFile: WingSection, Wing, Control
 export Airfoil
 """Representação de aerofólio com as informações necessárias para plot e entrada no AVL.
 
+O arquivo de entrada DEVE estar em formato selig.
+
 Os vetores `cl`, `cd` devem conter 3 elementos cada, com o coeficiente próximo da região
 de estol negativo, próximo da região de Cd mínimo, e próximo da região de estol positivo.
 
@@ -28,8 +30,14 @@ end
 
 filepath(a::Airfoil) = joinpath(a.directory, a.filename)
 
-# using Plots
-# Plots.plot(a::Airfoil; kwargs...) = Plots.plot(a.x, a.y; kwargs...)
+export camber_line_points
+function camber_line_points(a::Airfoil)
+    #ASSUMING selig file has ODD number of elements
+    leading_edge_index = (length(a.x)+1)/2 |> Int
+    x = a.x[leading_edge_index:end]
+    y = (a.y[leading_edge_index:end] + a.y[leading_edge_index:-1:1]) / 2
+    x, y
+end
 
 using RecipesBase
 
